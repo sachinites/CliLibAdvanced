@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-g -Wall
 INCLUDES=-I .
 CLILIB=libcli.a
-TARGET:${CLILIB} ../TcpServer/libnw.a
+TARGET:${CLILIB} TcpServer/libnw.a
 OBJ=cmd_hier.o \
 	parser.o \
 	serialize.o \
@@ -11,9 +11,9 @@ OBJ=cmd_hier.o \
 	clicbext.o \
 	gluethread/glthread.o \
 	ut/utinfra/ut_parser.o \
-	../TelnetServer/LineMgmt.o \
-	../TelnetServer/Sequence.o \
-	../TelnetServer/TelnetCharacterReader.o
+	TelnetServer/LineMgmt.o \
+	TelnetServer/Sequence.o \
+	TelnetServer/TelnetCharacterReader.o
 
 cmd_hier.o:cmd_hier.c
 	@echo "Building cmd_hier.o"
@@ -45,15 +45,15 @@ ut/utinfra/ut_parser.o:ut/utinfra/ut_parser.c
 ${CLILIB}: ${OBJ}
 	@echo "Building Library ${CLILIB}"
 	ar rs ${CLILIB} ${OBJ}
-../TelnetServer/LineMgmt.o:../TelnetServer/LineMgmt.cpp
-	${CC} ${CFLAGS} -c ../TelnetServer/LineMgmt.cpp -o ../TelnetServer/LineMgmt.o
-../TelnetServer/Sequence.o:../TelnetServer/Sequence.cpp
-	${CC} ${CFLAGS} -c ../TelnetServer/Sequence.cpp -o ../TelnetServer/Sequence.o
-../TelnetServer/TelnetCharacterReader.o:../TelnetServer/TelnetCharacterReader.cpp
-	${CC} ${CFLAGS} -c ../TelnetServer/TelnetCharacterReader.cpp -o ../TelnetServer/TelnetCharacterReader.o
-../TcpServer/libnw.a:
-	@echo "Building Library ../TcpServer/libnw.a"
-	(cd ../TcpServer; make)
+TelnetServer/LineMgmt.o:TelnetServer/LineMgmt.cpp
+	${CC} ${CFLAGS} -c TelnetServer/LineMgmt.cpp -o TelnetServer/LineMgmt.o
+TelnetServer/Sequence.o:TelnetServer/Sequence.cpp
+	${CC} ${CFLAGS} -c TelnetServer/Sequence.cpp -o TelnetServer/Sequence.o
+TelnetServer/TelnetCharacterReader.o:TelnetServer/TelnetCharacterReader.cpp
+	${CC} ${CFLAGS} -c TelnetServer/TelnetCharacterReader.cpp -o TelnetServer/TelnetCharacterReader.o
+TcpServer/libnw.a:
+	@echo "Building Library TcpServer/libnw.a"
+	(cd TcpServer; make)
 clean:
 	rm -f exe
 	rm -f *.o
@@ -61,5 +61,5 @@ clean:
 	rm -f ut/utinfra/*.o
 	rm -f ${CLILIB}
 	rm -f CMD_HIST_RECORD_FILE.txt
-	(cd ../TcpServer; make clean)
-	rm -f ../TelnetServer/*.o
+	(cd TcpServer; make clean)
+	rm -f TelnetServer/*.o

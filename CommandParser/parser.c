@@ -21,12 +21,13 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include "string_util.h"
+#include <pthread.h>
 #include <errno.h>
 #include "cmdtlv.h"
 #include "cliconst.h"
 #include "css.h"
 #include "libcli.h"
+#include "string_util.h"
 
 extern param_t root;
 extern leaf_type_handler leaf_handler_array[LEAF_MAX];
@@ -38,14 +39,17 @@ run_test_case(char *file_name, uint16_t tc_no);
 static bool cmd_recording_enabled = true;
 void parse_file(char *file_name) ;
 
+/* Allow CLI from only one source at a time */
+pthread_mutex_t cli_mutex; 
+
 static param_t*
 array_of_possibilities[POSSIBILITY_ARRAY_SIZE];
 
 void
 place_console(char new_line){
     if(new_line)
-        printf("\n");
-    printf("%s $ ", console_name);
+        cli_print("\n\r");
+    cli_print("%s $ ", console_name);
 }
 
 static char cons_input_buffer[CONS_INPUT_BUFFER_SIZE];
@@ -99,15 +103,15 @@ find_matching_param(param_t **options, const char *cmd_name){
         return array_of_possibilities[0];
 
     /* More than one param matched*/
-    printf("%d possibilities :\n", j);
+    cli_print("%d possibilities :\n\r", j);
     for(i = 0; i < j; i++)
-        printf("%-2d. %s\n", i, GET_CMD_NAME(array_of_possibilities[i]));
+        cli_print("%-2d. %s\n\r", i, GET_CMD_NAME(array_of_possibilities[i]));
 
-    printf("Choice [0-%d] : ? ", j-1);
+    cli_print("Choice [0-%d] : ? ", j-1);
     scanf("%d", &choice);
 
     if(choice < 0 || choice > (j-1)){
-        printf("\nInvalid Choice");
+        cli_print("\n\rInvalid Choice");
         return NULL;
     }
 
@@ -185,22 +189,22 @@ build_tlv_buffer(char **tokens,
             break;
 
         case CMD_NOT_FOUND:
-            printf(ANSI_COLOR_RED "Error : Following Token not registered : %s\n"
+            cli_print(ANSI_COLOR_RED "Error : Following Token not registered : %s\n\r"
                         ANSI_COLOR_RESET, *(tokens +i));
             break;
 
         case INVALID_LEAF:
-            printf(ANSI_COLOR_RED "Error : Following leaf value could not be validated"
-                    ": %s, Expected Data type = %s\n" 
+            cli_print(ANSI_COLOR_RED "Error : Following leaf value could not be validated"
+                    ": %s, Expected Data type = %s\n\r" 
                     ANSI_COLOR_RESET, *(tokens +i), GET_LEAF_TYPE_STR(param));
             break;
 
         case COMPLETE:
-            printf(ANSI_COLOR_GREEN "Parse Success.\n" ANSI_COLOR_RESET);
+            cli_print(ANSI_COLOR_GREEN "Parse Success.\n\r" ANSI_COLOR_RESET);
             if(param == libcli_get_show_brief_extension_param()){
                 if(!IS_APPLICATION_CALLBACK_HANDLER_REGISTERED(parent)){
                     status = INCOMPLETE_COMMAND;
-                    printf(ANSI_COLOR_YELLOW "Error : Incomplete Command\n" ANSI_COLOR_RESET);
+                    cli_print(ANSI_COLOR_YELLOW "Error : Incomplete Command\n\r" ANSI_COLOR_RESET);
                     break;
                 }
                 enable_or_disable = OPERATIONAL;
@@ -254,16 +258,16 @@ build_tlv_buffer(char **tokens,
             break;
 
         case USER_INVALID_LEAF:
-            printf(ANSI_COLOR_YELLOW "Error : User validation has failed : Invalid value for Leaf : %s\n", GET_LEAF_ID(param));
-            printf(ANSI_COLOR_RESET);
+            cli_print(ANSI_COLOR_YELLOW "Error : User validation has failed : Invalid value for Leaf : %s\n\r", GET_LEAF_ID(param));
+            cli_print(ANSI_COLOR_RESET);
             break;
 
         case INCOMPLETE_COMMAND:
-            printf(ANSI_COLOR_YELLOW "Error : Incomplete Command\n" ANSI_COLOR_RESET);
+            cli_print(ANSI_COLOR_YELLOW "Error : Incomplete Command\n\r" ANSI_COLOR_RESET);
             break;
 
         default:
-            printf(ANSI_COLOR_RED "FATAL : Unknown case fall\n" ANSI_COLOR_RESET);
+            cli_print(ANSI_COLOR_RED "FATAL : Unknown case fall\n\r" ANSI_COLOR_RESET);
     }
     return status;;
 }
@@ -321,7 +325,7 @@ parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd){
             }
         }
         else
-            printf("Info : do is supported from within config mode only\n");
+            cli_print("Info : do is supported from within config mode only\n\r");
     }
 
     else if (strncmp (tokens[0], "repeat" , strlen(tokens[0])) == 0) {
@@ -373,13 +377,14 @@ parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd){
 
 
 void
-command_parser(void){
+InputCliFromLocalShell(void){
 
     bool is_repeat_cmd;
     CMD_PARSE_STATUS status = UNKNOWN;
+
     GL_FD_OUT = STDOUT_FILENO;
 
-    printf("run - \'show help\' cmd to learn more");
+    cli_print("run - \'show help\' cmd to learn more");
     place_console(1);
     memset(&command_code_tlv, 0, sizeof(tlv_struct_t));
 
@@ -391,19 +396,24 @@ command_parser(void){
     while(1){
 
         is_repeat_cmd = false;
-
+         
         if((fgets((char *)cons_input_buffer, sizeof(cons_input_buffer)-1, stdin) == NULL)){
-            printf("error in reading from stdin\n");
+            cli_print("error in reading from stdin\n\r");
             exit(EXIT_SUCCESS);
         }
+        
+        pthread_mutex_lock(&cli_mutex);
+
          GL_FD_OUT = STDOUT_FILENO;
         /*IF only enter is hit*/ 
         if(strlen(cons_input_buffer) == 1){
             cons_input_buffer[0]= '\0';
             place_console(0);
+            pthread_mutex_unlock(&cli_mutex);
             continue; 
         }
 
+        GL_FD_OUT = STDOUT_FILENO;
         cons_input_buffer[strlen(cons_input_buffer) - 1] = '\0';
          
         status = parse_input_cmd(cons_input_buffer, strlen(cons_input_buffer), &is_repeat_cmd);
@@ -411,8 +421,11 @@ command_parser(void){
         if( is_repeat_cmd ) {
             memset(cons_input_buffer, 0, CONS_INPUT_BUFFER_SIZE);
             place_console(1);
+            pthread_mutex_unlock(&cli_mutex);
             continue;
         }
+
+        GL_FD_OUT = STDOUT_FILENO;
 
         if(status == COMPLETE && cmd_recording_enabled) {
             record_command(CMD_HIST_RECORD_FILE,
@@ -429,6 +442,7 @@ command_parser(void){
         memset(cons_input_buffer, 0, CONS_INPUT_BUFFER_SIZE);
 
         place_console(1);
+        pthread_mutex_unlock(&cli_mutex);
     }
 }
 
@@ -443,7 +457,7 @@ parse_file(char *file_name) {
 	
 	if (!fptr) {
 	
-		printf("Error : Could not open log file %s, errno = %d\n",
+		cli_print("Error : Could not open log file %s, errno = %d\n\r",
 				file_name, errno);
 		return;
 	}
@@ -455,7 +469,7 @@ parse_file(char *file_name) {
 
 	while (fgets(line, sizeof(line) - 1, fptr)) {
 
-		printf("Executing : %s", line);
+		cli_print("Executing : %s", line);
 	
 		tokens = tokenizer(line, ' ', &token_cnt);		
 
@@ -475,12 +489,28 @@ parse_file(char *file_name) {
 	place_console(1);
 }	
 
-void
-EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
+static void
+_EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
 
     bool is_repeat_cmd;
     CMD_PARSE_STATUS status = UNKNOWN;
 
      cli[cli_size] = '\0';
+
+    if (cli_size == 0) {
+        /* only enter is hit */
+        place_console(1);
+        return;
+    }
+
      status = parse_input_cmd(cli, cli_size, &is_repeat_cmd);
+     place_console(1);
+}
+
+void
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
+
+    pthread_mutex_lock(&cli_mutex);
+    _EnhancedParser(sockfd, cli, cli_size);
+    pthread_mutex_unlock(&cli_mutex);
 }

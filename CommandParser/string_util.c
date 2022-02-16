@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include "string_util.h"
 #include "cliconst.h"
+extern void
+cli_print(const char* format, ... );
 
 static char a_str[CONS_INPUT_BUFFER_SIZE];
 char temp[ LEAF_ID_SIZE + 2];
@@ -156,7 +158,7 @@ print_tokens(unsigned int index){
         if(tokens[i] == NULL)
             break;
 
-        printf("%s ", tokens[i]);
+        cli_print("%s ", tokens[i]);
     }
 }
 

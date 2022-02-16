@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include <string.h>
 #include "Sequence.h"
 #include "LineMgmt.h"
 
@@ -13,6 +14,21 @@
 
 unsigned char gbuff[32];
 extern line_t line[1];
+
+extern int GL_FD_OUT;
+
+extern void
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size);
+
+static bool
+clear_screen() {
+
+    if (strncmp((const char *)line[0].lbuf, "cls", 3) == 0 &&
+         line[0].n == 3) {
+        return true;
+    }
+    return false;
+}
 
 static void
 ReadSingleCharMsg(int sockfd, unsigned char *msg) {
@@ -32,13 +48,16 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 assert(line[0].lpos == 0);
                 line[0].cpos = 0;
                 line[0].n--;
-                esc_seq_erase_curr_line(sockfd);
-                esc_seq_move_cur_to_column(sockfd, 1);
+                line[0].lbuf[line[0].lpos] = '\0';
+                esc_seq_move_cur_left(sockfd, 1);
+                rc = write(sockfd, " ", 1);
+                esc_seq_move_cur_left(sockfd, 1);
                 return;
             }
             /* At the end of line */
             else if (line[0].cpos == line[0].lpos + 1) {
                 line[0].cpos--;
+                line[0].lbuf[line[0].lpos] = '\0';
                 line[0].lpos--;
                 line[0].n--;
                 esc_seq_move_cur_left(sockfd, 1);
@@ -63,8 +82,11 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
         case TAB_KEY:
             rc = write(sockfd, (const char *)msg, 1);
             break;
+        case 'Z':
+            print_line(&line[0]);
+            break;
         case 'a' ... 'z':
-        case 'A' ... 'Z':
+        case 'A' ... 'Y':
         case 48 ... 57:
         case SPACE_KEY:
             /* Tying on empty line */
@@ -92,7 +114,23 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             }
             break;
             case  FORWARD_SLASH_KEY:
-            break;
+             if (line[0].cpos == line[0].lpos + 1) {
+                line_add_character(&line[0], msg[0]);
+                line[0].cpos++;
+                EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                line_reinit(&line[0]);
+             }
+             break;
+            case DOT_KEY:
+            case QUESTION_KEY:
+                if ( (line[0].cpos == line[0].lpos + 1) ||
+                      (line[0].n == 0)) {
+                    line_add_character(&line[0], msg[0]);
+                    line[0].cpos++;
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    line_reinit(&line[0]);
+                }
+                break;
     }
 }
 
@@ -106,8 +144,27 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
 
     switch (msg[0]) {
         case ENTER_KEY:
+
+            /* If the user has typed cls<enter> then send back clear screen
+            instruction code to remote client. Dont bother to feed to Parser */
+            if (clear_screen()) {
+                rc = esc_seq_clear_screen(sockfd);
+                rc += write(sockfd, "Press Enter To Continue...", 
+                            strlen("Press Enter To Continue.."));
+                rc += esc_seq_move_cur_beginning_of_line(sockfd, 1);
+                line_reinit(&line[0]);
+                return;
+            }
+            if (line[0].n == 0) {
+            /* If only enter is hit, no need to send new line reset,
+                The Parser will do it because we need re-write the line
+                header*/
+            }
+            else {
+                rc = write(sockfd, "\r\n", 2);
+            }
+            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
             line_reinit(&line[0]);
-            rc = write(sockfd, "\r\n", 2);
             break;
         default: ;
     }
@@ -223,7 +280,7 @@ static void
  }
 
 void
-CLIParser(int sockfd, unsigned char *msg, uint16_t msg_size) {
+InputCliFromRemoteClient(int sockfd, unsigned char *msg, uint16_t msg_size) {
 
     switch(msg_size) {
         case 1 :
@@ -242,4 +299,5 @@ CLIParser(int sockfd, unsigned char *msg, uint16_t msg_size) {
             ReadLongerCharMsg(sockfd, msg, msg_size);
            ;
     }
+    GL_FD_OUT = sockfd;
 }

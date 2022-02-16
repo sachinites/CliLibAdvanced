@@ -115,8 +115,14 @@ esc_seq_move_cur_to_column(int sockfd, int col) {
 int
 esc_seq_clear_screen(int sockfd) {
 
-    /* ^[ [ 2 J */
-    return write(sockfd, "\033[2J", 4);
+    int rc;
+    
+    /*Clear screen  -    ^[ [ 2 J */
+    rc = write(sockfd, "\033[2J", 4);
+
+    /* Set the cursor to top*/
+    rc += esc_seq_set_cur_pos(sockfd, 0, 0);
+    return rc;
 }
 
 int

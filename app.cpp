@@ -4,9 +4,6 @@
 
 #include "libcli.h"
 
-extern void
-CLIParser (int sockfd, unsigned char *msg, uint16_t msg_size) ;
-
 static void
 print_client (const TcpClient *client) {
 
@@ -30,7 +27,7 @@ void
 client_recv_msg (const TcpClient *tcp_client, unsigned char *msg, uint16_t msg_size) {
     
     printf ("Appln : msg recd size : %dB\n", msg_size);
-    CLIParser(tcp_client->comm_fd, msg, msg_size);
+    InputCliFromRemoteClient(tcp_client->comm_fd, msg, msg_size);
     return; 
 }
 

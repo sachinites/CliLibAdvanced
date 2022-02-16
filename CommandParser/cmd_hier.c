@@ -21,17 +21,20 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <signal.h>
+#include <pthread.h>
 #include "cmdtlv.h"
 #include "libcli.h"
 #include "clistd.h"
 #include "string_util.h"
 #include "css.h"
-#include <signal.h>
+
 
 leaf_type_handler leaf_handler_array[LEAF_MAX];
 ser_buff_t *tlv_buff;
 static param_t *cmd_tree_cursor = NULL;
-int GL_FD_OUT = 0;
+extern int GL_FD_OUT;
+extern pthread_mutex_t cli_mutex;
 
 extern int
 ut_test_handler (param_t *param, 
@@ -206,13 +209,13 @@ void (*app_ctrlC_signal_handler)(void );
 
 static void
 ctrlC_signal_handler(int sig){
-    printf("Ctrl-C pressed\n");
+    cli_print("Ctrl-C pressed\n\r");
 
     if (app_ctrlC_signal_handler) {
         app_ctrlC_signal_handler();
     }
     else {
-        printf("Bye Bye\n");
+        cli_print("Bye Bye\n\r");
         exit(0);
     }
 }
@@ -446,6 +449,9 @@ init_libcli(){
     
     /* Resgister CTRL-C signal handler*/
     signal(SIGINT, ctrlC_signal_handler);
+
+    /* Initialize mutex */
+    pthread_mutex_init(&cli_mutex, NULL);
 }
 
 void
@@ -512,7 +518,7 @@ support_cmd_negation(param_t *param){
     param_t *negate_param = find_matching_param(&param->options[0], NEGATE_CHARACTER);
 
     if(negate_param && IS_PARAM_NO_CMD(negate_param)){
-        printf("Error : Attempt to add Duplicate Negate param in cmd : %s\n", GET_CMD_NAME(param));
+        cli_print("Error : Attempt to add Duplicate Negate param in cmd : %s\n\r", GET_CMD_NAME(param));
         return;
     }
 
@@ -592,7 +598,7 @@ libcli_register_param(param_t *parent, param_t *child){
         return;
     }
 
-    printf("%s() : Error : No space for new command\n", __FUNCTION__);
+    cli_print("%s() : Error : No space for new command\n\r", __FUNCTION__);
     assert(0);
 }
 
@@ -604,13 +610,13 @@ _dump_one_cmd(param_t *param, unsigned short tabs){
     PRINT_TABS(tabs);
 
     if(IS_PARAM_CMD(param) || IS_PARAM_NO_CMD(param))
-        printf("-->%s(%d)", GET_CMD_NAME(param), tabs);
+        cli_print("-->%s(%d)", GET_CMD_NAME(param), tabs);
     else
-        printf("-->%s(%d)", GET_LEAF_TYPE_STR(param), tabs);
+        cli_print("-->%s(%d)", GET_LEAF_TYPE_STR(param), tabs);
 
     for(; i < MAX_OPTION_SIZE; i++){
         if(param->options[i]){
-            printf("\n");
+            cli_print("\n\r");
             _dump_one_cmd(param->options[i], ++tabs);
             --tabs;
         }
@@ -625,14 +631,14 @@ dump_cmd_tree(){
 }
 
 extern 
-void command_parser(void);
+void InputCliFromLocalShell(void);
 
 extern 
 void  enhanced_command_parser(void);
 
 void
 start_shell(void){
-    command_parser();
+    InputCliFromLocalShell();
 }
 
 /* Command Mode implementation */
@@ -661,7 +667,7 @@ goto_top_of_cmd_tree(param_t *curr_cmd_tree_cursor){
     assert(curr_cmd_tree_cursor);
     
     if(curr_cmd_tree_cursor == &root){
-        printf(ANSI_COLOR_BLUE "Info : At Roof top Already\n" ANSI_COLOR_RESET);
+        cli_print(ANSI_COLOR_BLUE "Info : At Roof top Already\n\r" ANSI_COLOR_RESET);
         return;
     }
 
@@ -688,7 +694,7 @@ go_one_level_up_cmd_tree(param_t *curr_cmd_tree_cursor){
     assert(curr_cmd_tree_cursor);
 
     if(curr_cmd_tree_cursor == &root){
-        printf(ANSI_COLOR_BLUE "Info : At Roof top Already\n" ANSI_COLOR_RESET);
+        cli_print(ANSI_COLOR_BLUE "Info : At Roof top Already\n\r" ANSI_COLOR_RESET);
         return;
     }
 

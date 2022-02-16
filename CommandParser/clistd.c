@@ -35,6 +35,8 @@ get_last_command();
 
 extern char temp[ LEAF_ID_SIZE + 2];
 
+int GL_FD_OUT = 0;
+
 static void
 dump_all_commands(param_t *root, unsigned int index){
 
@@ -62,7 +64,7 @@ dump_all_commands(param_t *root, unsigned int index){
         
         if(IS_APPLICATION_CALLBACK_HANDLER_REGISTERED(root)){
             print_tokens(index + 1);
-            printf("\n");
+            cli_print("\n\r");
         }
 }
 
@@ -70,7 +72,7 @@ dump_all_commands(param_t *root, unsigned int index){
 
 CLI_VAL_RC
 int_validation_handler(leaf_t *leaf, char *value_passed){
-    /*printf("%s is called for leaf type = %s, leaf value = %s\n", __FUNCTION__,
+    /*cli_print("%s is called for leaf type = %s, leaf value = %s\n\r", __FUNCTION__,
      *                             get_str_leaf_type(leaf->leaf_type), value_passed);*/
     return VALIDATION_SUCCESS;
 }
@@ -78,7 +80,7 @@ int_validation_handler(leaf_t *leaf, char *value_passed){
 
 CLI_VAL_RC
 string_validation_handler(leaf_t *leaf, char *value_passed){
-    /*printf("%s is called for leaf type = %s, leaf value = %s\n", __FUNCTION__,
+    /*cli_print("%s is called for leaf type = %s, leaf value = %s\n\r", __FUNCTION__,
      *                             get_str_leaf_type(leaf->leaf_type), value_passed);*/
     return VALIDATION_SUCCESS;
 }
@@ -86,7 +88,7 @@ string_validation_handler(leaf_t *leaf, char *value_passed){
 
 CLI_VAL_RC
 ipv4_validation_handler(leaf_t *leaf, char *value_passed){
-    /*printf("%s is called for leaf type = %s, leaf value = %s\n", __FUNCTION__,
+    /*cli_print("%s is called for leaf type = %s, leaf value = %s\n\r", __FUNCTION__,
      *                             get_str_leaf_type(leaf->leaf_type), value_passed);*/
     return VALIDATION_SUCCESS;
 
@@ -95,7 +97,7 @@ ipv4_validation_handler(leaf_t *leaf, char *value_passed){
 
 CLI_VAL_RC
 ipv6_validation_handler(leaf_t *leaf, char *value_passed){
-    /*printf("%s is called for leaf type = %s, leaf value = %s\n", __FUNCTION__,
+    /*cli_print("%s is called for leaf type = %s, leaf value = %s\n\r", __FUNCTION__,
      *                             get_str_leaf_type(leaf->leaf_type), value_passed);*/
     return VALIDATION_SUCCESS;
 }
@@ -103,7 +105,7 @@ ipv6_validation_handler(leaf_t *leaf, char *value_passed){
 
 CLI_VAL_RC
 float_validation_handler(leaf_t *leaf, char *value_passed){
-    /*printf("%s is called for leaf type = %s, leaf value = %s\n", __FUNCTION__,
+    /*cli_print("%s is called for leaf type = %s, leaf value = %s\n\r", __FUNCTION__,
      *                             get_str_leaf_type(leaf->leaf_type), value_passed);*/
     return VALIDATION_SUCCESS;
 }
@@ -145,7 +147,7 @@ config_console_name_handler(param_t *param, ser_buff_t *b, op_mode enable_or_dis
             if(strncmp(tlv->value, console_name, strlen(tlv->value)) == 0)
                 set_device_name(DEFAULT_DEVICE_NAME);
             else
-                printf("Error : Incorrect device name\n");
+                cli_print("Error : Incorrect device name\n\r");
         }
     }TLV_LOOP_END;
     return 0;
@@ -156,7 +158,7 @@ config_console_name_handler(param_t *param, ser_buff_t *b, op_mode enable_or_dis
 repeat_last_command(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
     static char new_line_consume[2];
     char *last_cmd = get_last_command();
-    printf("prev : %s", last_cmd);
+    cli_print("prev : %s", last_cmd);
     scanf("%c", new_line_consume);;
     parse_input_cmd(last_cmd, strlen(last_cmd), NULL);
     return 0;
@@ -167,7 +169,7 @@ repeat_last_command(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 mode_enter_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
  
     if(param == libcli_get_root()){
-        printf(ANSI_COLOR_YELLOW "Info : Mode not supported at root level\n" ANSI_COLOR_RESET);
+        cli_print(ANSI_COLOR_YELLOW "Info : Mode not supported at root level\n\r" ANSI_COLOR_RESET);
         return 0;   
     }
     set_cmd_tree_cursor(param);
@@ -187,7 +189,7 @@ display_sub_options_callback(param_t *param, ser_buff_t *b, op_mode enable_or_di
     tlv_struct_t dummy;
 
     if(IS_APPLICATION_CALLBACK_HANDLER_REGISTERED(param))
-        printf("<Enter>\n");
+        cli_print("<Enter>\n\r");
 
     for(i = CHILDREN_START_INDEX; i <= CHILDREN_END_INDEX; i++){
         if(param->options[i]){
@@ -196,10 +198,10 @@ display_sub_options_callback(param_t *param, ser_buff_t *b, op_mode enable_or_di
                 continue;
 
             if(IS_PARAM_CMD(param->options[i]) || IS_PARAM_NO_CMD(param->options[i])){
-                printf(ANSI_COLOR_MAGENTA "nxt cmd  -> %-31s   |   %s\n" ANSI_COLOR_RESET, GET_CMD_NAME(param->options[i]), GET_PARAM_HELP_STRING(param->options[i]));
+                cli_print(ANSI_COLOR_MAGENTA "nxt cmd  -> %-31s   |   %s\n\r" ANSI_COLOR_RESET, GET_CMD_NAME(param->options[i]), GET_PARAM_HELP_STRING(param->options[i]));
                 continue;
             }
-            printf(ANSI_COLOR_CYAN "nxt leaf -> %-32s  |   %s\n" ANSI_COLOR_RESET, GET_LEAF_TYPE_STR(param->options[i]), GET_PARAM_HELP_STRING(param->options[i]));
+            cli_print(ANSI_COLOR_CYAN "nxt leaf -> %-32s  |   %s\n\r" ANSI_COLOR_RESET, GET_LEAF_TYPE_STR(param->options[i]), GET_PARAM_HELP_STRING(param->options[i]));
             continue;
         }
         break;
@@ -211,9 +213,9 @@ display_sub_options_callback(param_t *param, ser_buff_t *b, op_mode enable_or_di
         /*Add a dummy TLV to compensate for the cmd code TLV*/
         memset(&dummy, 0, sizeof(tlv_struct_t));
         collect_tlv(b, &dummy);
-        printf(ANSI_COLOR_YELLOW "possible values :\n");
+        cli_print(ANSI_COLOR_YELLOW "possible values :\n\r");
         param->disp_callback(param, b);
-        printf(ANSI_COLOR_RESET);
+        cli_print(ANSI_COLOR_RESET);
     }
     return 0;
 }
@@ -245,7 +247,7 @@ show_history_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
     FILE *f = fopen(CMD_HIST_RECORD_FILE, "r");
     
     if(!f){
-        printf("Error : History file could not be read\n");
+        cli_print("Error : History file could not be read\n\r");
         return 0;
     }
    
@@ -253,16 +255,16 @@ show_history_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
   
    cmd_offset[cmd_counter++] = ftell(f);
    while(fgets(file_cmsd_size, FILE_CMD_SIZE_MAX, f) != NULL) {
-       printf("%d. %s", cmd_counter - 1, file_cmsd_size);
+       cli_print("%d. %s", cmd_counter - 1, file_cmsd_size);
        cmd_offset[cmd_counter++] = ftell(f);
        memset(file_cmsd_size, 0, FILE_CMD_SIZE_MAX);
    } 
  
     int cmd_choice;
-    printf("Enter command no to trigger : ");
+    cli_print("Enter command no to trigger : ");
     scanf("%d", &cmd_choice);
     if(!(cmd_choice >= 0 && cmd_choice < cmd_counter)){
-        printf("Invalid choice\n");
+        cli_print("Invalid choice\n\r");
         fclose(f) ;
         return 0;
     }
@@ -273,7 +275,7 @@ show_history_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
    fgets(file_cmsd_size, FILE_CMD_SIZE_MAX, f);
    file_cmsd_size[FILE_CMD_SIZE_MAX -1] = '\0';
 
-   printf("Command to be triggered : %s", file_cmsd_size); 
+   cli_print("Command to be triggered : %s", file_cmsd_size); 
    parse_input_cmd(file_cmsd_size, strlen(file_cmsd_size), NULL);   
 
    fclose(f) ;
@@ -292,7 +294,7 @@ record_command(char *hist_file, char *cons_input_buffer, unsigned int cmd_len){
     }
     FILE *f = fopen(CMD_HIST_RECORD_FILE, "a");
     fwrite(cons_input_buffer, cmd_len, 1, f);
-    fwrite("\n", 1, 1, f);
+    fwrite("\n\r", 1, 1, f);
     cmd_counter++;
     fclose(f);
 }
@@ -336,7 +338,7 @@ load_file_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 	char *file_name = NULL;
 	tlv_struct_t *tlv = NULL;
 
-    printf("No Op - Full type the command\n");
+    cli_print("No Op - Full type the command\n\r");
     return 0;
 
 	TLV_LOOP_BEGIN(b, tlv) {
@@ -356,7 +358,7 @@ load_file_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
 int
 negate_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
-    printf("Command Negation - Type the cmd following to Negate\n");
+    cli_print("Command Negation - Type the cmd following to Negate\n\r");
     return 0;
 }
 
@@ -383,7 +385,7 @@ supportsave_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 int
 cli_terminate_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
-    cli_print("Bye Bye\n");
+    cli_print("Bye Bye\n\r");
     exit(0);
 }
 
@@ -459,7 +461,7 @@ grep_pattern_validation(char *value_passed){
 int
 pipe_handler (param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
-    printf ("%s() called \n", __FUNCTION__);
+    cli_print ("%s() called \n\r", __FUNCTION__);
     return 0;
 }
 

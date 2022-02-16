@@ -38,6 +38,8 @@ static struct timespec mq_wait_time;
 
 extern CMD_PARSE_STATUS
 parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd);
+extern void 
+cli_print(const char* format, ... );
 
 void
 ut_parser_init ( ) {
@@ -56,7 +58,7 @@ ut_parser_init ( ) {
                                       O_RDWR | O_CREAT,
                                       QUEUE_PERMISSIONS, &attr)) == -1) {
 
-        printf("UT Parser mq_open failed, errno = %d\n", errno);
+        cli_print("UT Parser mq_open failed, errno = %d\n", errno);
         exit(1);
     }
 
@@ -94,7 +96,7 @@ tc_print_result (glthread_t *head) {
     int pass_cnt = 0, fail_cnt = 0, total_cnt = 0;
 
     rc = sprintf(buff, "\n****  Result ******\n");
-    printf("%s", buff);
+    cli_print("%s", buff);
     fwrite(buff, 1, rc, ut_log_file);
 
     ITERATE_GLTHREAD_BEGIN(head, curr) {
@@ -103,13 +105,13 @@ tc_print_result (glthread_t *head) {
         rc = sprintf(buff, "%s  STEP: %d : %s\n", 
             res->pattern_match ? "PATTERN-MATCH" : "PATTERN-NOT-PRESENT",
             res->step_no, res->pass ? "PASS" : "FAIL");
-        printf("%s", buff);
+        cli_print("%s", buff);
         fwrite(buff, 1, rc, ut_log_file);
         res->pass ? pass_cnt++ : fail_cnt++;
         total_cnt++;
     } ITERATE_GLTHREAD_END(head, curr);
 
-    printf ("Total TC : %d   Pass : %d   Fail %d\n", total_cnt, pass_cnt, fail_cnt);
+    cli_print ("Total TC : %d   Pass : %d   Fail %d\n", total_cnt, pass_cnt, fail_cnt);
     rc = sprintf(buff, "Total TC : %d   Pass : %d   Fail %d\n", 
                 total_cnt, pass_cnt, fail_cnt);
     fwrite(buff, 1, rc, ut_log_file);
@@ -155,7 +157,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
     while (( fget_ptr = (fgets (line, sizeof(line), fp)))) {
 
             if (strlen(line) == 1 && line[0] == '\n') {
-                printf("\n");
+                cli_print("\n");
                 rc = sprintf (buff, "\n");
                 fwrite(buff, 1, rc, ut_log_file);
                 fflush(ut_log_file);
@@ -199,7 +201,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                /* Test case found */
                 rc = sprintf(buff, "\n ***** Executing Test case : %s - %d ***** \n",
                                     file_name,  current_tc_no);
-                printf("%s", buff);
+                cli_print("%s", buff);
                 fwrite(buff, 1, rc, ut_log_file);
                 fflush(ut_log_file);
                 TC_RUNNING = true;
@@ -216,7 +218,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                /* Test case found */
                 rc = sprintf(buff, "\n ***** Test case : %s - %d Finished ***** \n",
                                     file_name,  current_tc_no);
-                printf("%s", buff);
+                cli_print("%s", buff);
                 fwrite(buff, 1, rc, ut_log_file);
 
                 tc_print_result(&result_head);
@@ -235,7 +237,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                 token = strtok(line, ":") ;
                 token = strtok(NULL, ":") ;
                 rc = sprintf(buff, "Description : %s\n", token);
-                 printf("%s", buff);
+                 cli_print("%s", buff);
                  fwrite(buff, 1, rc, ut_log_file);
                  fflush(ut_log_file);
             }
@@ -247,7 +249,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                 token = strtok(line, ":") ;
                 token = strtok(NULL, ":") ;
                 rc = sprintf(buff, "STEP : %s\n", token);
-                printf("%s", buff);
+                cli_print("%s", buff);
                 fwrite(buff, 1, rc, ut_log_file);
                 fflush(ut_log_file);
                 current_step_no = atoi(token);
@@ -260,7 +262,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                 token = strtok(line, ":") ;
                 token = strtok(NULL, ":") ;
                 rc = sprintf(buff, "CMD : %s\n", token);
-                printf("%s", buff);
+                cli_print("%s", buff);
                 fwrite(buff, 1, rc, ut_log_file);
                 fflush(ut_log_file);
                 status = parse_input_cmd(token, strlen(token), &is_repeat_cmd);
@@ -272,7 +274,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
 
                     if (ut_parser_debug) {
                         rc = sprintf(buff, "Waiting for backend data\n");
-                        printf("%s", buff);
+                        cli_print("%s", buff);
                         fwrite(buff, 1, rc, ut_log_file);
                     }
 
@@ -281,7 +283,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                                         ut_parser_recv_buff, MAX_MSG_SIZE, NULL,
                                         &mq_wait_time)) == -1) {
 
-                            printf ("Msg Q  Time out : No Data Recvd from Backend\n");
+                            cli_print ("Msg Q  Time out : No Data Recvd from Backend\n");
                             rc += sprintf(buff, "Msg Q  Time out : No Data Recvd from Backend\n");
                             fwrite(buff, 1, rc, ut_log_file);
                             ut_parser_recv_buff_data_size = 0;
@@ -290,8 +292,8 @@ run_test_case(char *file_name, uint16_t tc_no) {
 
                     else if (ut_parser_debug) {
 
-                        printf("Mq Data Recvd by UT Parser : \n");
-                        printf("%s", ut_parser_recv_buff);
+                        cli_print("Mq Data Recvd by UT Parser : \n");
+                        cli_print("%s", ut_parser_recv_buff);
                         rc += sprintf(buff, "Mq Data Recvd by UT Parser : \n");
                         fwrite(buff, 1, rc, ut_log_file);
                         fwrite(ut_parser_recv_buff, 1, ut_parser_recv_buff_data_size, ut_log_file);
@@ -316,7 +318,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     rc1 += sprintf(pattern + rc1, ":%s", token);
                 }
               
-                printf("pattern to be matched : |%s|\n", pattern);
+                cli_print("pattern to be matched : |%s|\n", pattern);
                 rc = sprintf(buff, "pattern to be matched : |");
                 fwrite(buff, 1, rc, ut_log_file);
                 fwrite(pattern, 1, rc1, ut_log_file);
@@ -324,13 +326,13 @@ run_test_case(char *file_name, uint16_t tc_no) {
                 fwrite(buff, 1, rc, ut_log_file);
 
                 if (pattern_match(ut_parser_recv_buff,  ut_parser_recv_buff_data_size, pattern)) {
-                    printf("PASS\n");
+                    cli_print("PASS\n");
                     rc = sprintf(buff, "PASS\n");
                     fwrite(buff, 1, rc, ut_log_file);
                     tc_append_result(&result_head, current_step_no, true, true);
                 }
                 else {
-                   printf("FAIL\n");
+                   cli_print("FAIL\n");
                    rc = sprintf(buff,  "FAIL\n");
                    fwrite(buff, 1, rc, ut_log_file);
                    tc_append_result(&result_head, current_step_no, false, true);
@@ -354,7 +356,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     rc1 += sprintf(pattern + rc1,  ":%s", token);
                 }
 
-                printf("pattern to be not matched : |%s|\n", pattern);
+                cli_print("pattern to be not matched : |%s|\n", pattern);
                 rc = sprintf(buff, "pattern to be not matched : |");
                 fwrite(buff, 1, rc, ut_log_file);
                 fwrite(pattern, 1, rc1, ut_log_file);
@@ -362,13 +364,13 @@ run_test_case(char *file_name, uint16_t tc_no) {
                 fwrite(buff, 1, rc, ut_log_file);
 
                 if (!pattern_match(ut_parser_recv_buff, ut_parser_recv_buff_data_size, pattern)) {
-                    printf("PASS\n");
+                    cli_print("PASS\n");
                     rc = sprintf(buff, "PASS\n");
                     fwrite(buff, 1, rc, ut_log_file);
                     tc_append_result(&result_head, current_step_no, true, false);
                 }
                 else {
-                    printf("FAIL\n");
+                    cli_print("FAIL\n");
                     rc = sprintf(buff, "FAIL\n");
                     fwrite(buff, 1, rc, ut_log_file);
                     tc_append_result(&result_head, current_step_no, false, false);
@@ -383,7 +385,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     token = strtok(line, ":") ;
                     token = strtok(NULL, ":") ;
                     rc = sprintf(buff, "Sleeping for %s sec\n", token);
-                    printf("%s", buff);
+                    cli_print("%s", buff);
                     fwrite(buff, 1, rc, ut_log_file);
                     fflush(ut_log_file);
                     sleep(atoi(token));
@@ -392,7 +394,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
 
 
             else if (strncmp (line, ":ABORT:", strlen(":ABORT:")) == 0) {
-                    printf("Aborted\n");
+                    cli_print("Aborted\n");
                     rc = sprintf(buff, "Aborted\n");
                     fwrite(buff, 1, rc, ut_log_file);
                     break;
@@ -401,7 +403,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
 
 
             else if (strncmp (line, ":PAUSE:", strlen(":PAUSE:")) == 0) {
-                    printf("Paused\n");
+                    cli_print("Paused\n");
                     rc = sprintf(buff, "Paused\n");
                     fwrite(buff, 1, rc, ut_log_file);
                      fflush(ut_log_file);
@@ -413,13 +415,13 @@ run_test_case(char *file_name, uint16_t tc_no) {
              else if (strncmp (line, ":GREP:", strlen(":GREP:")) == 0) {
                     token = strtok(line, ":") ;
                     token = strtok(NULL, ":") ;
-                    printf ("Grep Pattern : %s\n", token);
+                    cli_print ("Grep Pattern : %s\n", token);
                     rc = sprintf (buff, "Grep Pattern : %s\n", token);
                     fwrite(buff, 1, rc, ut_log_file);
                     ut_parser_recv_buff_data_size = 
                         grep (ut_parser_recv_buff, ut_parser_recv_buff_data_size, token);
-                    printf ("Output After Grep : \n");
-                    printf("%s", ut_parser_recv_buff);
+                    cli_print ("Output After Grep : \n");
+                    cli_print("%s", ut_parser_recv_buff);
                     rc = sprintf (buff, "Output After Grep : \n");
                     fwrite(buff, 1, rc, ut_log_file);
                     fwrite(ut_parser_recv_buff, 1, ut_parser_recv_buff_data_size, ut_log_file);
@@ -431,7 +433,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
              else if (strncmp (line, ":PRINT:", strlen(":PRINT:")) == 0) {
                     token = strtok(line, ":") ;
                     token = strtok(NULL, ":") ;
-                    printf ("INFO : %s\n", token);
+                    cli_print ("INFO : %s\n", token);
                     rc = sprintf (buff, "INFO : %s\n", token);
                     fwrite(buff, 1, rc, ut_log_file);
                     fflush(ut_log_file);
@@ -448,7 +450,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     assert(index);
                     int_store1 = string_fetch_integer(ut_parser_recv_buff, 
                                         ut_parser_recv_buff_data_size, index);
-                    printf("int_store1 = %lu at index %d\n", int_store1, index);
+                    cli_print("int_store1 = %lu at index %d\n", int_store1, index);
                     rc = sprintf (buff, "int_store1 = %lu at index %d\n", int_store1, index);
                     fwrite(buff, 1, rc, ut_log_file);
                      fflush(ut_log_file);
@@ -463,7 +465,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     assert(index);
                     int_store2 = string_fetch_integer(ut_parser_recv_buff, 
                                         ut_parser_recv_buff_data_size, index);
-                    printf("int_store2 = %lu at index %d\n", int_store2, index);
+                    cli_print("int_store2 = %lu at index %d\n", int_store2, index);
                     rc = sprintf (buff, "int_store2 = %lu at index %d\n", int_store2, index);
                     fwrite(buff, 1, rc, ut_log_file);
                     fflush(ut_log_file);
@@ -478,7 +480,7 @@ run_test_case(char *file_name, uint16_t tc_no) {
                     assert(index);
                     int_store3 = string_fetch_integer(ut_parser_recv_buff, 
                                         ut_parser_recv_buff_data_size, index);
-                    printf("int_store3 = %lu at index %d\n", int_store3, index);
+                    cli_print("int_store3 = %lu at index %d\n", int_store3, index);
                     rc = sprintf (buff, "int_store3 = %lu at index %d\n", int_store3, index);
                     fwrite(buff, 1, rc, ut_log_file);
                      fflush(ut_log_file);
@@ -542,12 +544,12 @@ void
 cli_out(unsigned char *buff, size_t buff_size) {
 
     if (!TC_RUNNING) {
-        printf("%s", buff);
+        cli_print("%s", buff);
     }
     else {
         assert(buff_size < UT_PARSER_BUFF_MAX_SIZE);
          if (mq_send(UT_PARSER_MSG_Q_FD, (char *)buff , (buff_size + 1), 0) == -1 ) {
-            printf ("mq_send failed on FD %d, errno = %d\n", UT_PARSER_MSG_Q_FD, errno);
+            cli_print ("mq_send failed on FD %d, errno = %d\n", UT_PARSER_MSG_Q_FD, errno);
          }
     }
 }

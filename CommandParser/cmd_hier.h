@@ -157,7 +157,7 @@ INVOKE_LEAF_USER_VALIDATION_CALLBACK(param_t *param, char *leaf_value) {
 do{                       \
    unsigned short _i = 0; \
    for(; _i < n; _i++)    \
-       printf("  ");      \
+       cli_print("  ");      \
 } while(0);
 
 /*Command Mode implementation*/

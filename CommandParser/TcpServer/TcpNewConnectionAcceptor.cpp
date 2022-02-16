@@ -107,7 +107,8 @@ TcpNewConnectionAcceptor::StartTcpNewConnectionAcceptorThreadInternal() {
         tcp_client->ip_addr = client_addr.sin_addr.s_addr;
         tcp_client->port_no = client_addr.sin_port;
         tcp_client->tcp_server = this->tcp_server;
-        tcp_client->SendMsg((char *)"Welcome\n", strlen("Welcome\n"));
+        tcp_client->SendMsg((char *)"Remote Login : Welcome\n",
+                    strlen("Remote Login : Welcome\n"));
         tcp_client->SetTcpMsgDemarcar(
             TcpMsgDemarcar::InstantiateTcpMsgDemarcar(
                 this->tcp_server->msgd_type, 8, 0, 0, 0, 0));

@@ -34,7 +34,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "clicbext.h"
-
+extern void 
+cli_print(const char* format, ... );
 void
 terminate_signal_handler(int){
 
@@ -49,5 +50,5 @@ terminate_signal_handler(int){
 
 void
 collect_supportsave_data(){
-    printf("%s() is called ...\n", __FUNCTION__);
+    cli_print("%s() is called ...\n", __FUNCTION__);
 }
