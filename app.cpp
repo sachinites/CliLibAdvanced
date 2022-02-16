@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <memory.h>
-#include <arpa/inet.h>
-#include "TcpServer/TcpServer.h"
-#include "TcpServer/TcpClient.h"
-#include "TcpServer/network_utils.h"
+
+#include "libcli.h"
 
 extern void
-CLIParser(int sockfd, unsigned char *msg, uint16_t msg_size) ;
+CLIParser (int sockfd, unsigned char *msg, uint16_t msg_size) ;
 
 static void
-print_client(const TcpClient *client) {
+print_client (const TcpClient *client) {
 
     printf ("[%s , %d]\n", network_covert_ip_n_to_p(htonl(client->ip_addr), 0),
                 htons(client->port_no));
@@ -29,7 +27,7 @@ client_connect_notif (const TcpClient *tcp_client) {
 }
 
 void
-client_recv_msg(const TcpClient *tcp_client, unsigned char *msg, uint16_t msg_size) {
+client_recv_msg (const TcpClient *tcp_client, unsigned char *msg, uint16_t msg_size) {
     
     printf ("Appln : msg recd size : %dB\n", msg_size);
     CLIParser(tcp_client->comm_fd, msg, msg_size);
@@ -41,8 +39,10 @@ main(int argc, char **argv) {
 
     TcpServer *server1 = new TcpServer("127.0.0.1", 40000, "Default");
     server1->SetServerNotifCallbacks(
-            client_connect_notif, client_disconnect_notif,client_recv_msg, NULL);
+            client_connect_notif, client_disconnect_notif, client_recv_msg, NULL);
     server1->Start();
+    init_libcli();
+    start_shell();
     pthread_exit(0);
     return 0;
 }

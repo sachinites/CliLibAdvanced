@@ -25,8 +25,6 @@
 #include "clicbext.h"
 #include "string_util.h"
 
-int GL_FD_OUT = STDOUT_FILENO;
-
 extern CMD_PARSE_STATUS
 parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd);
 
@@ -390,26 +388,25 @@ cli_terminate_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 int
 show_help_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
-    printf("Welcome to Help Wizard\n");
-    printf("========================\n");
-    printf("1. Use '%s' Character after the command to enter command mode\n", MODE_CHARACTER);
-    printf("2. Use '%s' Character after the command to see possible follow up suboptions\n", SUBOPTIONS_CHARACTER);
-    printf("3. Use '%s' from within the config branch to directly trigger operational commands\n", DO);
-    printf("4. Use '%s' Character after the command to see possible complete command completions\n", CMD_EXPANSION_CHARACTER);
-    printf("5. Built-in commands:\n");
-    printf("    a. %s - clear screen\n", CLEAR_SCR_STRING);
-    printf("    b. %s - jump to top of cmd tree\n", GOTO_TOP_STRING);
-    printf("    c. %s - jump one level up of command tree\n", GOTO_ONE_LVL_UP_STRING);
-    printf("    d. config [%s] console name <console name> - set/unset new console name\n", NEGATE_CHARACTER);
-    printf("    e. config [%s] supportsave enable - enable/disable supportsave facility\n", NEGATE_CHARACTER);
-    printf("    f. debug show cmdtree - Show entire command tree\n");
-    printf("    g. show history - show history of commands triggered\n");
-    printf("    h. repeat - repeat the last command\n");
-	printf(ANSI_COLOR_YELLOW "                      Author : Abhishek Sagar, Juniper Networks\n" ANSI_COLOR_RESET);
-	printf(ANSI_COLOR_YELLOW "                      Visit : www.csepracticals.com for more courses and projects\n" ANSI_COLOR_RESET);
+    dprintf(GL_FD_OUT, "\n\rWelcome to Help Wizard\n\r");
+    dprintf(GL_FD_OUT, "========================\n\r");
+    dprintf(GL_FD_OUT, "1. Use '%s' Character after the command to enter command mode\n\r", MODE_CHARACTER);
+    dprintf(GL_FD_OUT, "2. Use '%s' Character after the command to see possible follow up suboptions\n\r", SUBOPTIONS_CHARACTER);
+    dprintf(GL_FD_OUT, "3. Use '%s' from within the config branch to directly trigger operational commands\n\r", DO);
+    dprintf(GL_FD_OUT, "4. Use '%s' Character after the command to see possible complete command completions\n\r", CMD_EXPANSION_CHARACTER);
+    dprintf(GL_FD_OUT, "5. Built-in commands:\n\r");
+    dprintf(GL_FD_OUT, "    a. %s - clear screen\n\r", CLEAR_SCR_STRING);
+    dprintf(GL_FD_OUT, "    b. %s - jump to top of cmd tree\n\r", GOTO_TOP_STRING);
+    dprintf(GL_FD_OUT, "    c. %s - jump one level up of command tree\n\r", GOTO_ONE_LVL_UP_STRING);
+    dprintf(GL_FD_OUT, "    d. config [%s] console name <console name> - set/unset new console name\n\r", NEGATE_CHARACTER);
+    dprintf(GL_FD_OUT, "    e. config [%s] supportsave enable - enable/disable supportsave facility\n\r", NEGATE_CHARACTER);
+    dprintf(GL_FD_OUT, "    f. debug show cmdtree - Show entire command tree\n\r");
+    dprintf(GL_FD_OUT, "    g. show history - show history of commands triggered\n\r");
+    dprintf(GL_FD_OUT, "    h. repeat - repeat the last command\n\r");
+	dprintf(GL_FD_OUT, ANSI_COLOR_YELLOW "                      Author : Abhishek Sagar, Juniper Networks\n\r" ANSI_COLOR_RESET);
+	dprintf(GL_FD_OUT, ANSI_COLOR_YELLOW "                      Visit : www.csepracticals.com for more courses and projects\n\r" ANSI_COLOR_RESET);
     return 0;
 }
-
 
 int
 show_resgistered_cmd_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){

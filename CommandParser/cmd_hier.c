@@ -31,6 +31,7 @@
 leaf_type_handler leaf_handler_array[LEAF_MAX];
 ser_buff_t *tlv_buff;
 static param_t *cmd_tree_cursor = NULL;
+int GL_FD_OUT = 0;
 
 extern int
 ut_test_handler (param_t *param, 

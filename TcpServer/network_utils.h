@@ -19,6 +19,8 @@
 #ifndef __NETWORK_UTILS__
 #define __NETWORK_UTILS__
 
+#include <arpa/inet.h>
+
 /* General Nw utilities */
 char *
 network_covert_ip_n_to_p(uint32_t ip_addr,

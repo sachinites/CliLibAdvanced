@@ -12,6 +12,7 @@ typedef enum {
     TAB_KEY = 9,
     ENTER_KEY = 13,
     SPACE_KEY = 32,
+    DOT_KEY = 46,
     FORWARD_SLASH_KEY = 47,
     QUESTION_KEY = 63,
     PIPE_KEY = 124,

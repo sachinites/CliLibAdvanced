@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-g
-TARGET:testapp.exe tcp_client.exe
+TARGET:testapp.exe tcp_client.exe libnw.a
 LIBS=-lpthread -lrt
 OBJS=TcpClient.o \
 			TcpClientDbManager.o  \
@@ -15,6 +15,9 @@ OBJS=TcpClient.o \
 
 testapp.exe:testapp.o ${OBJS}
 	${CC} ${CFLAGS} ${OBJS} testapp.o -o testapp.exe ${LIBS}
+
+libnw.a:${OBJS}
+	ar rs libnw.a ${OBJS}
 
 tcp_client.exe:tcp_client.o
 	${CC} ${CFLAGS} tcp_client.o -o tcp_client.exe
@@ -58,3 +61,4 @@ TcpMsgVariableSizeDemarcar.o:TcpMsgVariableSizeDemarcar.cpp
 clean:
 	rm -f *.o
 	rm -f *exe
+	rm -f libnw.a

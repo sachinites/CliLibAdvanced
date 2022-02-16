@@ -2,7 +2,7 @@ CC=g++
 CFLAGS=-g -Wall
 INCLUDES=-I .
 CLILIB=libcli.a
-TARGET:exe ${CLILIB} ${FMSLIB} TcpServer/tcp_client.exe TcpServer/testapp.exe
+TARGET:${CLILIB} ../TcpServer/libnw.a
 OBJ=cmd_hier.o \
 	parser.o \
 	serialize.o \
@@ -11,13 +11,10 @@ OBJ=cmd_hier.o \
 	clicbext.o \
 	gluethread/glthread.o \
 	ut/utinfra/ut_parser.o \
-	TelnetServer/LineMgmt.o \
-	TelnetServer/Sequence.o \
-	TelnetServer/TelnetCharacterReader.o
+	../TelnetServer/LineMgmt.o \
+	../TelnetServer/Sequence.o \
+	../TelnetServer/TelnetCharacterReader.o
 
-exe:testapp.o ${CLILIB}
-	@echo "Building final executable"
-	@ ${CC} ${CFLAGS} ${INCLUDES} testapp.o -o exe -L . -lcli -lpthread -lrt
 cmd_hier.o:cmd_hier.c
 	@echo "Building cmd_hier.o"
 	@ ${CC} ${CFLAGS} -c ${INCLUDES} cmd_hier.c -o cmd_hier.o
@@ -48,16 +45,15 @@ ut/utinfra/ut_parser.o:ut/utinfra/ut_parser.c
 ${CLILIB}: ${OBJ}
 	@echo "Building Library ${CLILIB}"
 	ar rs ${CLILIB} ${OBJ}
-TcpServer/tcp_client.exe:
-	(cd TcpServer; make)
-TcpServer/testapp.exe:
-	(cd TcpServer; make)
-TelnetServer/LineMgmt.o:TelnetServer/LineMgmt.cpp
-	${CC} ${CFLAGS} -c TelnetServer/LineMgmt.cpp -o TelnetServer/LineMgmt.o
-TelnetServer/Sequence.o:TelnetServer/Sequence.cpp
-	${CC} ${CFLAGS} -c TelnetServer/Sequence.cpp -o TelnetServer/Sequence.o
-TelnetServer/TelnetCharacterReader.o:TelnetServer/TelnetCharacterReader.cpp
-	${CC} ${CFLAGS} -c TelnetServer/TelnetCharacterReader.cpp -o TelnetServer/TelnetCharacterReader.o
+../TelnetServer/LineMgmt.o:../TelnetServer/LineMgmt.cpp
+	${CC} ${CFLAGS} -c ../TelnetServer/LineMgmt.cpp -o ../TelnetServer/LineMgmt.o
+../TelnetServer/Sequence.o:../TelnetServer/Sequence.cpp
+	${CC} ${CFLAGS} -c ../TelnetServer/Sequence.cpp -o ../TelnetServer/Sequence.o
+../TelnetServer/TelnetCharacterReader.o:../TelnetServer/TelnetCharacterReader.cpp
+	${CC} ${CFLAGS} -c ../TelnetServer/TelnetCharacterReader.cpp -o ../TelnetServer/TelnetCharacterReader.o
+../TcpServer/libnw.a:
+	@echo "Building Library ../TcpServer/libnw.a"
+	(cd ../TcpServer; make)
 clean:
 	rm -f exe
 	rm -f *.o
@@ -65,5 +61,5 @@ clean:
 	rm -f ut/utinfra/*.o
 	rm -f ${CLILIB}
 	rm -f CMD_HIST_RECORD_FILE.txt
-	(cd TcpServer; make clean)
-	rm -f TelnetServer/*.o
+	(cd ../TcpServer; make clean)
+	rm -f ../TelnetServer/*.o

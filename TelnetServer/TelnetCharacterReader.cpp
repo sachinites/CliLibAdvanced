@@ -14,6 +14,11 @@
 unsigned char gbuff[32];
 extern line_t line[1];
 
+extern int GL_FD_OUT;
+
+extern void
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size);
+
 static void
 ReadSingleCharMsg(int sockfd, unsigned char *msg) {
 
@@ -32,6 +37,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 assert(line[0].lpos == 0);
                 line[0].cpos = 0;
                 line[0].n--;
+                line[0].lbuf[line[0].lpos] = '\0';
                 esc_seq_erase_curr_line(sockfd);
                 esc_seq_move_cur_to_column(sockfd, 1);
                 return;
@@ -39,6 +45,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             /* At the end of line */
             else if (line[0].cpos == line[0].lpos + 1) {
                 line[0].cpos--;
+                line[0].lbuf[line[0].lpos] = '\0';
                 line[0].lpos--;
                 line[0].n--;
                 esc_seq_move_cur_left(sockfd, 1);
@@ -63,8 +70,11 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
         case TAB_KEY:
             rc = write(sockfd, (const char *)msg, 1);
             break;
+        case 'Z':
+            print_line(&line[0]);
+            break;
         case 'a' ... 'z':
-        case 'A' ... 'Z':
+        case 'A' ... 'Y':
         case 48 ... 57:
         case SPACE_KEY:
             /* Tying on empty line */
@@ -93,6 +103,16 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             break;
             case  FORWARD_SLASH_KEY:
             break;
+            case DOT_KEY:
+            case QUESTION_KEY:
+                if ( (line[0].cpos == line[0].lpos + 1) ||
+                      (line[0].n == 0)) {
+                    line_add_character(&line[0], msg[0]);
+                    line[0].cpos++;
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    line_reinit(&line[0]);
+                }
+                break;
     }
 }
 
@@ -106,6 +126,7 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
 
     switch (msg[0]) {
         case ENTER_KEY:
+            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
             line_reinit(&line[0]);
             rc = write(sockfd, "\r\n", 2);
             break;
@@ -242,4 +263,5 @@ CLIParser(int sockfd, unsigned char *msg, uint16_t msg_size) {
             ReadLongerCharMsg(sockfd, msg, msg_size);
            ;
     }
+    GL_FD_OUT = sockfd;
 }

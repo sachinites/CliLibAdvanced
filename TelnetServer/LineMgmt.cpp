@@ -134,6 +134,7 @@ line_del_charat(line_t *line, uint8_t pos) {
 
         for (i = pos + 1; i <= line->lpos; i++) {
             line->lbuf[i - 1] = line->lbuf[i];
+            line->lbuf[i] = '\0';
         }
         line->lpos--;
         line->n--;

@@ -377,6 +377,7 @@ command_parser(void){
 
     bool is_repeat_cmd;
     CMD_PARSE_STATUS status = UNKNOWN;
+    GL_FD_OUT = STDOUT_FILENO;
 
     printf("run - \'show help\' cmd to learn more");
     place_console(1);
@@ -395,7 +396,7 @@ command_parser(void){
             printf("error in reading from stdin\n");
             exit(EXIT_SUCCESS);
         }
-    
+         GL_FD_OUT = STDOUT_FILENO;
         /*IF only enter is hit*/ 
         if(strlen(cons_input_buffer) == 1){
             cons_input_buffer[0]= '\0';
@@ -474,3 +475,12 @@ parse_file(char *file_name) {
 	place_console(1);
 }	
 
+void
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
+
+    bool is_repeat_cmd;
+    CMD_PARSE_STATUS status = UNKNOWN;
+
+     cli[cli_size] = '\0';
+     status = parse_input_cmd(cli, cli_size, &is_repeat_cmd);
+}
