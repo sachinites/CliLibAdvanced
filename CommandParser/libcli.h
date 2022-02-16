@@ -94,4 +94,7 @@ start_shell(void);
 void
 cli_register_ctrlC_handler(void (*app_ctrlC_signal_handler)(void ));
 
+void 
+cli_print(const char* format, ... );
+
 #endif

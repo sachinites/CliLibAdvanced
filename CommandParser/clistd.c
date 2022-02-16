@@ -17,6 +17,8 @@
  */
 
 #include <signal.h>
+#include <stdarg.h>
+#include <stdio.h>
 #include "cmd_hier.h"
 #include "clistd.h"
 #include "cmdtlv.h"
@@ -381,30 +383,30 @@ supportsave_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 int
 cli_terminate_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
-    printf("Bye Bye\n");
+    cli_print("Bye Bye\n");
     exit(0);
 }
 
 int
 show_help_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
-    dprintf(GL_FD_OUT, "\n\rWelcome to Help Wizard\n\r");
-    dprintf(GL_FD_OUT, "========================\n\r");
-    dprintf(GL_FD_OUT, "1. Use '%s' Character after the command to enter command mode\n\r", MODE_CHARACTER);
-    dprintf(GL_FD_OUT, "2. Use '%s' Character after the command to see possible follow up suboptions\n\r", SUBOPTIONS_CHARACTER);
-    dprintf(GL_FD_OUT, "3. Use '%s' from within the config branch to directly trigger operational commands\n\r", DO);
-    dprintf(GL_FD_OUT, "4. Use '%s' Character after the command to see possible complete command completions\n\r", CMD_EXPANSION_CHARACTER);
-    dprintf(GL_FD_OUT, "5. Built-in commands:\n\r");
-    dprintf(GL_FD_OUT, "    a. %s - clear screen\n\r", CLEAR_SCR_STRING);
-    dprintf(GL_FD_OUT, "    b. %s - jump to top of cmd tree\n\r", GOTO_TOP_STRING);
-    dprintf(GL_FD_OUT, "    c. %s - jump one level up of command tree\n\r", GOTO_ONE_LVL_UP_STRING);
-    dprintf(GL_FD_OUT, "    d. config [%s] console name <console name> - set/unset new console name\n\r", NEGATE_CHARACTER);
-    dprintf(GL_FD_OUT, "    e. config [%s] supportsave enable - enable/disable supportsave facility\n\r", NEGATE_CHARACTER);
-    dprintf(GL_FD_OUT, "    f. debug show cmdtree - Show entire command tree\n\r");
-    dprintf(GL_FD_OUT, "    g. show history - show history of commands triggered\n\r");
-    dprintf(GL_FD_OUT, "    h. repeat - repeat the last command\n\r");
-	dprintf(GL_FD_OUT, ANSI_COLOR_YELLOW "                      Author : Abhishek Sagar, Juniper Networks\n\r" ANSI_COLOR_RESET);
-	dprintf(GL_FD_OUT, ANSI_COLOR_YELLOW "                      Visit : www.csepracticals.com for more courses and projects\n\r" ANSI_COLOR_RESET);
+    cli_print("\n\rWelcome to Help Wizard\n\r");
+    cli_print("========================\n\r");
+    cli_print("1. Use '%s' Character after the command to enter command mode\n\r", MODE_CHARACTER);
+    cli_print("2. Use '%s' Character after the command to see possible follow up suboptions\n\r", SUBOPTIONS_CHARACTER);
+    cli_print("3. Use '%s' from within the config branch to directly trigger operational commands\n\r", DO);
+    cli_print("4. Use '%s' Character after the command to see possible complete command completions\n\r", CMD_EXPANSION_CHARACTER);
+    cli_print("5. Built-in commands:\n\r");
+    cli_print("    a. %s - clear screen\n\r", CLEAR_SCR_STRING);
+    cli_print("    b. %s - jump to top of cmd tree\n\r", GOTO_TOP_STRING);
+    cli_print("    c. %s - jump one level up of command tree\n\r", GOTO_ONE_LVL_UP_STRING);
+    cli_print("    d. config [%s] console name <console name> - set/unset new console name\n\r", NEGATE_CHARACTER);
+    cli_print("    e. config [%s] supportsave enable - enable/disable supportsave facility\n\r", NEGATE_CHARACTER);
+    cli_print("    f. debug show cmdtree - Show entire command tree\n\r");
+    cli_print("    g. show history - show history of commands triggered\n\r");
+    cli_print("    h. repeat - repeat the last command\n\r");
+	cli_print(ANSI_COLOR_YELLOW "                      Author : Abhishek Sagar, Juniper Networks\n\r" ANSI_COLOR_RESET);
+	cli_print(ANSI_COLOR_YELLOW "                      Visit : www.csepracticals.com for more courses and projects\n\r" ANSI_COLOR_RESET);
     return 0;
 }
 
@@ -459,4 +461,12 @@ pipe_handler (param_t *param, ser_buff_t *b, op_mode enable_or_disable){
 
     printf ("%s() called \n", __FUNCTION__);
     return 0;
+}
+
+void 
+cli_print(const char* format, ... ) { 
+    va_list args;
+    va_start( args, format );
+    vdprintf( GL_FD_OUT, format, args );
+    va_end( args );
 }
