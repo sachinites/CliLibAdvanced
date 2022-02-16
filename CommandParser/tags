@@ -1,0 +1,420 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ANSI_COLOR_BLUE	css.h	7;"	d
+ANSI_COLOR_CYAN	css.h	9;"	d
+ANSI_COLOR_GREEN	css.h	5;"	d
+ANSI_COLOR_MAGENTA	css.h	8;"	d
+ANSI_COLOR_RED	css.h	4;"	d
+ANSI_COLOR_RESET	css.h	10;"	d
+ANSI_COLOR_YELLOW	css.h	6;"	d
+BASE	gluethread/glthread.h	71;"	d
+BOOLEAN	libcliid.h	/^    BOOLEAN,$/;"	e	enum:__anon5
+CC	Makefile	/^CC=gcc$/;"	m
+CFLAGS	Makefile	/^CFLAGS=-g -Wall$/;"	m
+CHILDREN_END_INDEX	cliconst.h	42;"	d
+CHILDREN_START_INDEX	cliconst.h	41;"	d
+CLEAR_SCR_STRING	cliconst.h	49;"	d
+CLILIB	Makefile	/^CLILIB=libcli.a$/;"	m
+CLI_VAL_RC	clistd.h	/^} CLI_VAL_RC;$/;"	t	typeref:enum:__anon6
+CMD	cmd_hier.h	/^    CMD,$/;"	e	enum:__anon3
+CMDCODE	cmd_hier.h	/^    int CMDCODE;$/;"	m	struct:_param_t_
+CMDCODE_DEBUG_UT	cliconst.h	78;"	d
+CMDCODE_RUN_UT_TC	cliconst.h	77;"	d
+CMDODE_CONFIG_NODE_LOOPBACK	main4.c	7;"	d	file:
+CMDODE_SHOW_NODE	main2.c	4;"	d	file:
+CMDODE_SHOW_NODE	main3.c	4;"	d	file:
+CMDODE_SHOW_NODE	main4.c	4;"	d	file:
+CMDODE_SHOW_NODE_LOOPBACK	main2.c	5;"	d	file:
+CMDODE_SHOW_NODE_LOOPBACK	main3.c	5;"	d	file:
+CMDODE_SHOW_NODE_LOOPBACK	main4.c	5;"	d	file:
+CMD_EXPANSION_CHARACTER	cliconst.h	34;"	d
+CMD_EXPANSION_INDEX	cliconst.h	40;"	d
+CMD_HIST_RECORD_FILE	cliconst.h	36;"	d
+CMD_NAME_SIZE	cliconst.h	22;"	d
+CMD_NOT_FOUND	cliconst.h	/^    CMD_NOT_FOUND,$/;"	e	enum:__anon2
+CMD_PARSE_STATUS	cliconst.h	/^} CMD_PARSE_STATUS;$/;"	t	typeref:enum:__anon2
+COMPLETE	cliconst.h	/^    COMPLETE,$/;"	e	enum:__anon2
+CONFIG_CONSOLEN_NAME_NAME	cliconst.h	74;"	d
+CONFIG_DISABLE	libcliid.h	/^    CONFIG_DISABLE,$/;"	e	enum:__anon4
+CONFIG_ENABLE	libcliid.h	/^    CONFIG_ENABLE,$/;"	e	enum:__anon4
+CONFIG_LOAD_FILE	cliconst.h	76;"	d
+CONFIG_SUPPORTSAVE_ENABLE	cliconst.h	73;"	d
+CONS_INPUT_BUFFER_SIZE	cliconst.h	27;"	d
+DEBUG_SHOW_CMDTREE	cliconst.h	75;"	d
+DEFAULT_DEVICE_NAME	cliconst.h	31;"	d
+DO	cliconst.h	50;"	d
+ERROR	cliconst.h	/^    ERROR,$/;"	e	enum:__anon2
+EXTRACT_CMD_CODE	cmdtlv.h	37;"	d
+FILE_CMD_SIZE_MAX	cliconst.h	37;"	d
+FLOAT	libcliid.h	/^    FLOAT,$/;"	e	enum:__anon5
+GET_CMD_NAME	cmd_hier.h	86;"	d
+GET_LEAF_ID	cmd_hier.h	88;"	d
+GET_LEAF_TYPE	cmd_hier.h	85;"	d
+GET_LEAF_TYPE_STR	cmd_hier.h	83;"	d
+GET_LEAF_VALUE_PTR	cmd_hier.h	84;"	d
+GET_PARAM_CMD	cmd_hier.h	78;"	d
+GET_PARAM_HELP_STRING	cmd_hier.h	87;"	d
+GET_PARAM_LEAF	cmd_hier.h	79;"	d
+GLTHREAD_GET_USER_DATA_FROM_OFFSET	gluethread/glthread.h	83;"	d
+GLTHREAD_TO_STRUCT	gluethread/glthread.h	63;"	d
+GL_FD_OUT	clistd.c	/^int GL_FD_OUT = STDOUT_FILENO;$/;"	v
+GOTO_ONE_LVL_UP_STRING	cliconst.h	48;"	d
+GOTO_TOP_STRING	cliconst.h	47;"	d
+HIDE_PARAM	libcli.h	91;"	d
+INCLUDES	Makefile	/^INCLUDES=-I .$/;"	m
+INCOMPLETE_COMMAND	cliconst.h	/^    INCOMPLETE_COMMAND,$/;"	e	enum:__anon2
+INT	libcliid.h	/^    INT,$/;"	e	enum:__anon5
+INVALID	libcliid.h	/^    INVALID,$/;"	e	enum:__anon5
+INVALID_LEAF	cliconst.h	/^    INVALID_LEAF,$/;"	e	enum:__anon2
+INVOKE_APPLICATION_CALLBACK_HANDLER	cmd_hier.h	101;"	d
+INVOKE_LEAF_LIB_VALIDATION_CALLBACK	cmd_hier.h	98;"	d
+INVOKE_LEAF_USER_VALIDATION_CALLBACK	cmd_hier.h	/^INVOKE_LEAF_USER_VALIDATION_CALLBACK(param_t *param, char *leaf_value) {$/;"	f
+IPV4	libcliid.h	/^    IPV4,$/;"	e	enum:__anon5
+IPV6	libcliid.h	/^    IPV6,$/;"	e	enum:__anon5
+IS_APPLICATION_CALLBACK_HANDLER_REGISTERED	cmd_hier.h	93;"	d
+IS_CURRENT_MODE_CLEAR	cmd_hier.h	178;"	d
+IS_CURRENT_MODE_CONFIG	cmd_hier.h	177;"	d
+IS_CURRENT_MODE_DEBUG	cmd_hier.h	176;"	d
+IS_CURRENT_MODE_SHOW	cmd_hier.h	175;"	d
+IS_GLTHREAD_LIST_EMPTY	gluethread/glthread.h	60;"	d
+IS_LEAF_USER_VALIDATION_CALLBACK_REGISTERED	cmd_hier.h	90;"	d
+IS_PARAM_CMD	cmd_hier.h	81;"	d
+IS_PARAM_HIDDEN	libcli.h	92;"	d
+IS_PARAM_LEAF	cmd_hier.h	82;"	d
+IS_PARAM_MODE_ENABLE	cmd_hier.h	104;"	d
+IS_PARAM_NO_CMD	cmd_hier.h	80;"	d
+IS_PARAM_SUBOPTIONS_ENABLE	cmd_hier.h	105;"	d
+IS_QUEUED_UP_IN_THREAD	gluethread/glthread.h	57;"	d
+ITERATE_GLTHREAD_BEGIN	gluethread/glthread.h	73;"	d
+ITERATE_GLTHREAD_END	gluethread/glthread.h	80;"	d
+LEAF	cmd_hier.h	/^    LEAF,$/;"	e	enum:__anon3
+LEAF_ID_SIZE	cliconst.h	25;"	d
+LEAF_MAX	libcliid.h	/^    LEAF_MAX$/;"	e	enum:__anon5
+LEAF_VALUE_HOLDER_SIZE	cliconst.h	24;"	d
+MAX_CMD_TREE_DEPTH	cliconst.h	23;"	d
+MAX_MESSAGES	ut/utinfra/ut_parser.c	34;"	d	file:
+MAX_MSG_SIZE	ut/utinfra/ut_parser.c	35;"	d	file:
+MAX_OPTION_SIZE	cliconst.h	35;"	d
+MAX_SAVED_CMDS	cliconst.h	43;"	d
+MIN	cmd_hier.h	76;"	d
+MODE_CHARACTER	cliconst.h	32;"	d
+MODE_PARAM_INDEX	cliconst.h	38;"	d
+MODE_UNKNOWN	libcliid.h	/^    MODE_UNKNOWN$/;"	e	enum:__anon4
+MTRACE_SOURCE	testapp.c	23;"	d	file:
+MTRACE_SOURCE_DEST	testapp.c	24;"	d	file:
+MTRACE_SOURCE_DEST_GROUP	testapp.c	25;"	d	file:
+MTRACE_SOURCE_GROUP	testapp.c	26;"	d	file:
+MULTIPLE_MATCHING_COMMANDS	cliconst.h	/^    MULTIPLE_MATCHING_COMMANDS,$/;"	e	enum:__anon2
+NEGATE_CHARACTER	cliconst.h	46;"	d
+NO_CMD	cmd_hier.h	/^    NO_CMD$/;"	e	enum:__anon3
+OBJ	Makefile	/^OBJ=cmd_hier.o parser.o serialize.o string_util.o clistd.o clicbext.o gluethread\/glthread.o ut\/utinfra\/ut_parser.o$/;"	m
+OPERATIONAL	libcliid.h	/^    OPERATIONAL,$/;"	e	enum:__anon4
+PARAM_HELP_STRING_SIZE	cliconst.h	26;"	d
+POSSIBILITY_ARRAY_SIZE	cliconst.h	30;"	d
+PRINT_TABS	cmd_hier.h	162;"	d
+QUEUE_PERMISSIONS	ut/utinfra/ut_parser.c	36;"	d	file:
+SERIALIZE_BUFFER_DEFAULT_SIZE	serialize.h	8;"	d
+SHOW_EXTENSION_PARAM	cliconst.h	52;"	d
+SHOW_EXTENSION_PARAM_BRIEF	cliconst.h	53;"	d
+SHOW_EXTENSION_PARAM_DETAIL	cliconst.h	54;"	d
+SHOW_EXTENSION_PARAM_EXTENSIVE	cliconst.h	55;"	d
+SHOW_HELP	cliconst.h	69;"	d
+SHOW_HISTORY	cliconst.h	70;"	d
+SHOW_HISTORY_N	cliconst.h	71;"	d
+SHOW_REGISTERED_COMMANDS	cliconst.h	72;"	d
+STRING	libcliid.h	/^    STRING,$/;"	e	enum:__anon5
+SUBOPTIONS_CHARACTER	cliconst.h	33;"	d
+SUBOPTIONS_INDEX	cliconst.h	39;"	d
+TC_RUNNING	ut/utinfra/ut_parser.c	/^static bool TC_RUNNING = false;$/;"	v	file:
+TERMINAL_NAME_SIZE	cliconst.h	28;"	d
+TLV_LOOP_BEGIN	cmdtlv.h	40;"	d
+TLV_LOOP_END	cmdtlv.h	47;"	d
+TLV_MAX_BUFFER_SIZE	cliconst.h	29;"	d
+UNKNOWN	cliconst.h	/^    UNKNOWN$/;"	e	enum:__anon2
+USER_INVALID_LEAF	cliconst.h	/^    USER_INVALID_LEAF,$/;"	e	enum:__anon2
+UT_PARSER_BUFF_MAX_SIZE	ut/utinfra/ut_parser.c	22;"	d	file:
+UT_PARSER_MSG_Q_FD	ut/utinfra/ut_parser.c	/^static int UT_PARSER_MSG_Q_FD; $/;"	v	file:
+VALIDATION_FAILED	clistd.h	/^    VALIDATION_FAILED = -1,$/;"	e	enum:__anon6
+VALIDATION_SUCCESS	clistd.h	/^    VALIDATION_SUCCESS$/;"	e	enum:__anon6
+_INVOKE_LEAF_USER_VALIDATION_CALLBACK	cmd_hier.h	95;"	d
+__CLICBEXTN__	clicbext.h	34;"	d
+__CLISTD__	clistd.h	20;"	d
+__CMDTLV__H	cmdtlv.h	21;"	d
+__CMD_HIER__	cmd_hier.h	20;"	d
+__CSS__	css.h	2;"	d
+__GLUETHREAD__	gluethread/glthread.h	34;"	d
+__LIBCLICONSTANTS__	cliconst.h	20;"	d
+__LIBCLIID__	libcliid.h	20;"	d
+__LIBCLI__	libcli.h	20;"	d
+__SERIALIZE__	serialize.h	2;"	d
+__STRING_UTIL__	string_util.h	20;"	d
+_dump_one_cmd	cmd_hier.c	/^_dump_one_cmd(param_t *param, unsigned short tabs){$/;"	f	file:
+_glthread	gluethread/glthread.h	/^typedef struct _glthread{$/;"	s
+_param_t	cmd_hier.h	/^typedef union _param_t{$/;"	u
+_param_t	cmd_hier.h	/^} _param_t;$/;"	t	typeref:union:_param_t
+_param_t_	cmd_hier.h	/^struct _param_t_{$/;"	s
+_person	gluethread/test.c	/^typedef struct _person{$/;"	s	file:
+a_str	string_util.c	/^static char a_str[CONS_INPUT_BUFFER_SIZE];$/;"	v	file:
+age	gluethread/test.c	/^    int age;$/;"	m	struct:_person	file:
+app_ctrlC_signal_handler	cmd_hier.c	/^void (*app_ctrlC_signal_handler)(void );$/;"	v
+array_of_possibilities	parser.c	/^array_of_possibilities[POSSIBILITY_ARRAY_SIZE];$/;"	v	file:
+b	serialize.h	/^    void *b;$/;"	m	struct:serialized_buffer
+boolean_validation_handler	clistd.c	/^boolean_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+brief	cliconst.h	/^    brief,$/;"	e	enum:__anon1
+build_cmd_tree_leaves_data	cmd_hier.c	/^build_cmd_tree_leaves_data(ser_buff_t *tlv_buff,\/*Output serialize buffer*\/$/;"	f
+build_mode_console_name	cmd_hier.c	/^build_mode_console_name(param_t *dst_param){$/;"	f
+build_tlv_buffer	parser.c	/^build_tlv_buffer(char **tokens, $/;"	f	file:
+callback	cmd_hier.h	/^    cmd_callback callback;$/;"	m	struct:_param_t_
+checkpoint	serialize.h	/^    int checkpoint;$/;"	m	struct:serialized_buffer
+clear	cmd_hier.c	/^static param_t clear;$/;"	v	file:
+clear_screen_handler	clistd.c	/^clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+cli_out	ut/utinfra/ut_parser.c	/^cli_out(unsigned char *buff, size_t buff_size) {$/;"	f
+cli_register_ctrlC_handler	cmd_hier.c	/^cli_register_ctrlC_handler(void (*fn_ptr)(void )) {$/;"	f
+cli_terminate_handler	clistd.c	/^cli_terminate_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+cmd	cmd_hier.h	/^    cmd_t *cmd;$/;"	m	union:_param_t
+cmd	cmd_hier.h	/^typedef struct cmd{$/;"	s
+cmd_callback	cmd_hier.h	/^typedef int (*cmd_callback)(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_diable);$/;"	t
+cmd_expansion_param	cmd_hier.c	/^static param_t cmd_expansion_param;$/;"	v	file:
+cmd_name	cmd_hier.h	/^    char cmd_name[CMD_NAME_SIZE];$/;"	m	struct:cmd
+cmd_recording_enabled	parser.c	/^static bool cmd_recording_enabled = true;$/;"	v	file:
+cmd_t	cmd_hier.h	/^} cmd_t;$/;"	t	typeref:struct:cmd
+cmd_tree_cursor	cmd_hier.c	/^static param_t *cmd_tree_cursor = NULL;$/;"	v	file:
+cmd_type	cmd_hier.h	/^    _param_t cmd_type;$/;"	m	struct:_param_t_
+collect_supportsave_data	clicbext.c	/^collect_supportsave_data(){$/;"	f
+collect_tlv	cmdtlv.h	58;"	d
+command_code_tlv	parser.c	/^static tlv_struct_t command_code_tlv;$/;"	v	file:
+command_parser	parser.c	/^command_parser(void){$/;"	f
+config	cmd_hier.c	/^static param_t config;$/;"	v	file:
+config_console_name_handler	clistd.c	/^config_console_name_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+config_mode_enter_handler	clistd.c	/^config_mode_enter_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+config_router_name_handler	testapp.c	/^config_router_name_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+cons_input_buffer	parser.c	/^static char cons_input_buffer[CONS_INPUT_BUFFER_SIZE];$/;"	v	file:
+console_name	parser.c	/^char console_name[TERMINAL_NAME_SIZE];$/;"	v
+copy_in_serialized_buffer_by_offset	serialize.c	/^void copy_in_serialized_buffer_by_offset(ser_buff_t *b, int size, char *value, int offset){$/;"	f
+ctrlC_signal_handler	cmd_hier.c	/^ctrlC_signal_handler(int sig){$/;"	f	file:
+de_serialize_string	serialize.c	/^de_serialize_string(char *dest, ser_buff_t *b, int size){$/;"	f
+debug	cmd_hier.c	/^static param_t debug;$/;"	v	file:
+debug_show	cmd_hier.c	/^static param_t debug_show;$/;"	v	file:
+delete_glthread_list	gluethread/glthread.c	/^delete_glthread_list(glthread_t *glthread_head){$/;"	f
+dequeue_glthread_first	gluethread/glthread.c	/^dequeue_glthread_first(glthread_t *base_glthread){$/;"	f
+deserialize_primitive	serialize.h	55;"	d
+detail	cliconst.h	/^    detail,$/;"	e	enum:__anon1
+disp_callback	cmd_hier.h	/^    display_possible_values_callback disp_callback;$/;"	m	struct:_param_t_
+display_cmd_expansion_callback	clistd.c	/^display_cmd_expansion_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+display_possible_values_callback	cmd_hier.h	/^typedef void (*display_possible_values_callback)(param_t *, ser_buff_t *);$/;"	t
+display_sub_options_callback	clistd.c	/^display_sub_options_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+do_hook	cmd_hier.c	/^static param_t do_hook;$/;"	v	file:
+dump_all_commands	clistd.c	/^dump_all_commands(param_t *root, unsigned int index){$/;"	f	file:
+dump_cmd_tree	cmd_hier.c	/^dump_cmd_tree(){$/;"	f
+dump_tlv_serialized_buffer	cmdtlv.h	/^dump_tlv_serialized_buffer(ser_buff_t *tlv_ser_buff){$/;"	f
+enable_disable_validation_handler	clistd.c	/^enable_disable_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+enable_show_extension_param_brief	cmd_hier.c	/^enable_show_extension_param_brief(param_t *param){$/;"	f
+end_cmd_handler	clistd.c	/^end_cmd_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+exit_cmd_handler	clistd.c	/^exit_cmd_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+extensive	cliconst.h	/^    extensive,$/;"	e	enum:__anon1
+file_cmsd_size	clistd.c	/^static char file_cmsd_size[FILE_CMD_SIZE_MAX];$/;"	v	file:
+find_matching_param	parser.c	/^find_matching_param(param_t **options, const char *cmd_name){$/;"	f
+float_validation_handler	clistd.c	/^float_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+free_serialize_buffer	serialize.c	/^void free_serialize_buffer(ser_buff_t *b){$/;"	f
+get_child_array_ptr	cmd_hier.h	/^get_child_array_ptr(param_t *param){$/;"	f
+get_cmd_tree_cursor	cmd_hier.c	/^get_cmd_tree_cursor(){$/;"	f
+get_current_branch_hook	cmd_hier.c	/^get_current_branch_hook(param_t *current_param){$/;"	f
+get_glthread_list_count	gluethread/glthread.c	/^get_glthread_list_count(glthread_t *glthread_head){$/;"	f
+get_last_command	parser.c	/^get_last_command(){$/;"	f
+get_serialize_buffer_checkpoint_offset	serialize.c	/^get_serialize_buffer_checkpoint_offset(ser_buff_t *b){$/;"	f
+get_serialize_buffer_current_ptr	serialize.c	/^char* get_serialize_buffer_current_ptr(ser_buff_t *b){$/;"	f
+get_serialize_buffer_current_ptr_offset	serialize.c	/^int get_serialize_buffer_current_ptr_offset(ser_buff_t *b){$/;"	f
+get_serialize_buffer_size	serialize.c	/^int  get_serialize_buffer_size(ser_buff_t *b){$/;"	f
+get_show_extension_type	cmd_hier.c	/^get_show_extension_type(ser_buff_t *b){$/;"	f
+get_str_leaf_type	cmd_hier.c	/^get_str_leaf_type(leaf_type_t leaf_type){$/;"	f
+get_token	string_util.c	/^get_token(unsigned int index){$/;"	f
+glthread	gluethread/test.c	/^    glthread_t glthread;$/;"	m	struct:_person	file:
+glthread_add_before	gluethread/glthread.c	/^glthread_add_before(glthread_t *curr_glthread, glthread_t *new_glthread){$/;"	f
+glthread_add_last	gluethread/glthread.c	/^glthread_add_last(glthread_t *glthread_head, glthread_t *new_glthread){$/;"	f
+glthread_add_next	gluethread/glthread.c	/^glthread_add_next(glthread_t *curr_glthread, glthread_t *new_glthread){$/;"	f
+glthread_priority_insert	gluethread/glthread.c	/^glthread_priority_insert(glthread_t *glthread_head, $/;"	f
+glthread_t	gluethread/glthread.h	/^} glthread_t;$/;"	t	typeref:struct:_glthread
+glue	ut/utinfra/ut_parser.c	/^    glthread_t glue;$/;"	m	struct:tc_result_	file:
+go_one_level_up_cmd_tree	cmd_hier.c	/^go_one_level_up_cmd_tree(param_t *curr_cmd_tree_cursor){$/;"	f
+goto_top_of_cmd_tree	cmd_hier.c	/^goto_top_of_cmd_tree(param_t *curr_cmd_tree_cursor){$/;"	f
+grep	string_util.c	/^grep (char string[], int string_size, char pattern[]) {$/;"	f
+help	cmd_hier.h	/^    char help[PARAM_HELP_STRING_SIZE];$/;"	m	struct:_param_t_
+init_glthread	gluethread/glthread.c	/^init_glthread(glthread_t *glthread){$/;"	f
+init_libcli	cmd_hier.c	/^init_libcli(){$/;"	f
+init_param	cmd_hier.c	/^init_param(param_t *param,                               \/* pointer to static param_t variable*\/$/;"	f
+init_serialized_buffer	serialize.c	/^init_serialized_buffer(ser_buff_t **b){$/;"	f
+init_serialized_buffer_of_defined_size	serialize.c	/^init_serialized_buffer_of_defined_size(ser_buff_t **b, int size){$/;"	f
+init_token_array	string_util.c	/^init_token_array(){$/;"	f
+int_store1	ut/utinfra/ut_parser.c	/^static uint64_t int_store1, int_store2, int_store3;$/;"	v	file:
+int_store2	ut/utinfra/ut_parser.c	/^static uint64_t int_store1, int_store2, int_store3;$/;"	v	file:
+int_store3	ut/utinfra/ut_parser.c	/^static uint64_t int_store1, int_store2, int_store3;$/;"	v	file:
+int_validation_handler	clistd.c	/^int_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+ipv4_validation_handler	clistd.c	/^ipv4_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+ipv6_validation_handler	clistd.c	/^ipv6_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+is_cmd_string_match	cmd_hier.h	/^is_cmd_string_match(param_t *param, const char *str){$/;"	f
+is_number	string_util.c	/^is_number (char *string) {$/;"	f	file:
+is_serialized_buffer_empty	serialize.c	/^is_serialized_buffer_empty(ser_buff_t *b){$/;"	f
+is_user_in_cmd_mode	cmd_hier.c	/^is_user_in_cmd_mode(){$/;"	f
+ishidden	cmd_hier.h	/^    char ishidden;$/;"	m	struct:_param_t_
+last_command_input_buffer	parser.c	/^static char last_command_input_buffer[CONS_INPUT_BUFFER_SIZE];$/;"	v	file:
+leaf	cmd_hier.h	/^    leaf_t *leaf;$/;"	m	union:_param_t
+leaf	cmd_hier.h	/^typedef struct leaf{$/;"	s
+leaf_handler_array	cmd_hier.c	/^leaf_type_handler leaf_handler_array[LEAF_MAX];$/;"	v
+leaf_id	cmd_hier.h	/^    char leaf_id[LEAF_ID_SIZE];\/*Within a single command, it should be unique*\/$/;"	m	struct:leaf
+leaf_id	cmdtlv.h	/^    char leaf_id[LEAF_ID_SIZE];$/;"	m	struct:tlv_struct
+leaf_t	clistd.h	/^typedef struct leaf leaf_t;$/;"	t	typeref:struct:leaf
+leaf_t	cmd_hier.h	/^} leaf_t;$/;"	t	typeref:struct:leaf
+leaf_type	cmd_hier.h	/^    leaf_type_t leaf_type;$/;"	m	struct:leaf
+leaf_type	cmdtlv.h	/^    leaf_type_t leaf_type;$/;"	m	struct:tlv_struct
+leaf_type_handler	cmd_hier.h	/^typedef CLI_VAL_RC (*leaf_type_handler)(leaf_t *leaf, char *value_passed);$/;"	t
+leaf_type_t	libcliid.h	/^} leaf_type_t;$/;"	t	typeref:enum:__anon5
+left	gluethread/glthread.h	/^    struct _glthread *left;$/;"	m	struct:_glthread	typeref:struct:_glthread::_glthread
+libcli_get_clear_hook	cmd_hier.c	/^libcli_get_clear_hook(void){$/;"	f
+libcli_get_cmd_expansion_param	cmd_hier.c	/^libcli_get_cmd_expansion_param(){$/;"	f
+libcli_get_config_hook	cmd_hier.c	/^libcli_get_config_hook(void){$/;"	f
+libcli_get_debug_hook	cmd_hier.c	/^libcli_get_debug_hook(void){$/;"	f
+libcli_get_debug_show_hook	cmd_hier.c	/^libcli_get_debug_show_hook(void){$/;"	f
+libcli_get_do_hook	cmd_hier.c	/^libcli_get_do_hook(void){$/;"	f
+libcli_get_mode_param	cmd_hier.c	/^libcli_get_mode_param(){$/;"	f
+libcli_get_repeat_hook	cmd_hier.c	/^libcli_get_repeat_hook(void){$/;"	f
+libcli_get_root	cmd_hier.c	/^libcli_get_root(void){$/;"	f
+libcli_get_run_hook	cmd_hier.c	/^libcli_get_run_hook(void){$/;"	f
+libcli_get_show_brief_extension_param	cmd_hier.c	/^libcli_get_show_brief_extension_param(void){$/;"	f
+libcli_get_show_hook	cmd_hier.c	/^libcli_get_show_hook(void){$/;"	f
+libcli_get_suboptions_param	cmd_hier.c	/^libcli_get_suboptions_param(){$/;"	f
+libcli_register_display_callback	cmd_hier.c	/^libcli_register_display_callback(param_t *param, $/;"	f
+libcli_register_param	cmd_hier.c	/^libcli_register_param(param_t *parent, param_t *child){$/;"	f
+list_vlans	testapp.c	/^list_vlans(param_t *param, ser_buff_t *tlv_buf){$/;"	f	file:
+load_file_handler	clistd.c	/^load_file_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+main	gluethread/test.c	/^int main(int argc, char **argv){$/;"	f
+main	main1.c	/^main(int argc, char **argv){$/;"	f
+main	main2.c	/^main(int argc, char **argv){$/;"	f
+main	main3.c	/^main(int argc, char **argv){$/;"	f
+main	main4.c	/^main(int argc, char **argv){$/;"	f
+main	testapp.c	/^main(int argc, char **argv){$/;"	f
+mark_checkpoint_serialize_buffer	serialize.c	/^mark_checkpoint_serialize_buffer(ser_buff_t *b){$/;"	f
+mode_enter_callback	clistd.c	/^mode_enter_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+mode_param	cmd_hier.c	/^static param_t mode_param;$/;"	v	file:
+mq_wait_time	ut/utinfra/ut_parser.c	/^static struct timespec mq_wait_time;$/;"	v	typeref:struct:timespec	file:
+mtrace_handler	testapp.c	/^mtrace_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+negate_callback	clistd.c	/^negate_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+next	serialize.h	/^    int next;$/;"	m	struct:serialized_buffer
+node_callback_handler	main2.c	/^node_callback_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+node_callback_handler	main3.c	/^node_callback_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+node_callback_handler	main4.c	/^node_callback_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+node_loopback_callback_handler	main2.c	/^node_loopback_callback_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+node_loopback_callback_handler	main3.c	/^node_loopback_callback_handler(param_t *param, $/;"	f
+node_loopback_callback_handler	main4.c	/^node_loopback_callback_handler(param_t *param, $/;"	f
+none	cliconst.h	/^    none$/;"	e	enum:__anon1
+offset	gluethread/test.c	53;"	d	file:
+op_mode	libcliid.h	/^} op_mode;$/;"	t	typeref:enum:__anon4
+options	cmd_hier.h	/^    param_t *options[MAX_OPTION_SIZE];$/;"	m	struct:_param_t_
+param_t	clistd.h	/^typedef struct _param_t_ param_t;$/;"	t	typeref:struct:_param_t_
+param_t	cmd_hier.h	/^typedef struct _param_t_ param_t;$/;"	t	typeref:struct:_param_t_
+param_type	cmd_hier.h	/^    param_type_t param_type;$/;"	m	struct:_param_t_
+param_type_t	cmd_hier.h	/^} param_type_t;$/;"	t	typeref:enum:__anon3
+parent	cmd_hier.h	/^    param_t *parent;$/;"	m	struct:_param_t_
+parse_file	parser.c	/^parse_file(char *file_name) {$/;"	f
+parse_input_cmd	parser.c	/^parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd){$/;"	f
+parser_process_repeat_cmd	parser.c	/^parser_process_repeat_cmd(char *next_token) {$/;"	f	file:
+pass	ut/utinfra/ut_parser.c	/^    bool pass;$/;"	m	struct:tc_result_	file:
+pattern_match	string_util.c	/^pattern_match(char string[], int string_size, char pattern[]) {$/;"	f
+pattern_match	ut/utinfra/ut_parser.c	/^    bool pattern_match;$/;"	m	struct:tc_result_	file:
+person_t	gluethread/test.c	/^} person_t ;$/;"	t	typeref:struct:_person	file:
+place_console	parser.c	/^place_console(char new_line){$/;"	f
+prepare_tlv_from_leaf	cmdtlv.h	61;"	d
+print_buffer_details	serialize.c	/^void print_buffer_details(ser_buff_t *b, const char *fn, int lineno){$/;"	f
+print_tlv_content	cmdtlv.h	/^print_tlv_content(tlv_struct_t *tlv){$/;"	f
+print_tokens	string_util.c	/^print_tokens(unsigned int index){$/;"	f
+put_value_in_tlv	cmdtlv.h	65;"	d
+re_init_tokens	string_util.c	/^re_init_tokens(int token_cnt){$/;"	f
+record_command	clistd.c	/^record_command(char *hist_file, char *cons_input_buffer, unsigned int cmd_len){$/;"	f
+remove_glthread	gluethread/glthread.c	/^remove_glthread(glthread_t *curr_glthread){$/;"	f
+repeat	cmd_hier.c	/^static param_t repeat;$/;"	v	file:
+repeat_last_command	clistd.c	/^repeat_last_command(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+replaceSubstring	string_util.c	/^void replaceSubstring(char string[], char sub[], char new_str[])$/;"	f
+reset_cmd_tree_cursor	cmd_hier.c	/^reset_cmd_tree_cursor(){$/;"	f
+reset_serialize_buffer	serialize.c	/^void reset_serialize_buffer(ser_buff_t *b){$/;"	f
+restore_checkpoint_serialize_buffer	serialize.c	/^restore_checkpoint_serialize_buffer(ser_buff_t *b){$/;"	f
+right	gluethread/glthread.h	/^    struct _glthread *right;$/;"	m	struct:_glthread	typeref:struct:_glthread::_glthread
+root	cmd_hier.c	/^static param_t root;$/;"	v	file:
+run	cmd_hier.c	/^static param_t run;$/;"	v	file:
+run_test_case	ut/utinfra/ut_parser.c	/^run_test_case(unsigned char *file_name, uint16_t tc_no) {$/;"	f
+senior_citizen	gluethread/test.c	/^senior_citizen(person_t *p1, person_t *p2){$/;"	f
+ser_buff_t	clistd.h	/^typedef struct serialized_buffer ser_buff_t;$/;"	t	typeref:struct:serialized_buffer
+ser_buff_t	cmd_hier.h	/^typedef struct serialized_buffer ser_buff_t;$/;"	t	typeref:struct:serialized_buffer
+ser_buff_t	serialize.h	/^} ser_buff_t;$/;"	t	typeref:struct:serialized_buffer
+serialize_buffer_skip	serialize.c	/^serialize_buffer_skip(ser_buff_t *b, int size){$/;"	f
+serialize_double	serialize.c	/^void serialize_double(ser_buff_t *b, double data){$/;"	f
+serialize_float	serialize.c	/^void serialize_float(ser_buff_t *b, float data){$/;"	f
+serialize_int	serialize.c	/^void serialize_int(ser_buff_t *b, int data){$/;"	f
+serialize_int32	serialize.c	/^void serialize_int32(ser_buff_t *b, int data){$/;"	f
+serialize_int8	serialize.c	/^void serialize_int8(ser_buff_t *b, char data){$/;"	f
+serialize_primitive	serialize.h	72;"	d
+serialize_string	serialize.c	/^void serialize_string(ser_buff_t *b, char *data, int nbytes){$/;"	f
+serialize_uint32	serialize.c	/^void serialize_uint32(ser_buff_t *b, unsigned int data){$/;"	f
+serialize_uint8	serialize.c	/^void serialize_uint8(ser_buff_t *b, char data){$/;"	f
+serialized_buffer	serialize.h	/^typedef struct serialized_buffer{$/;"	s
+set_cmd_tree_cursor	cmd_hier.c	/^set_cmd_tree_cursor(param_t *param){$/;"	f
+set_device_name	cmd_hier.c	/^set_device_name(const char *cons_name){$/;"	f
+set_param_cmd_code	cmd_hier.c	/^set_param_cmd_code(param_t *param, int cmd_code){$/;"	f
+set_ut_debug_flag	ut/utinfra/ut_parser.c	/^set_ut_debug_flag(char * ut_enable_flag) {$/;"	f	file:
+show	cmd_hier.c	/^static param_t show;$/;"	v	file:
+show_brief_extension	cmd_hier.c	/^static param_t show_brief_extension;$/;"	v	file:
+show_cmd_tree	clistd.c	/^show_cmd_tree(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+show_ext_t	cliconst.h	/^} show_ext_t;$/;"	t	typeref:enum:__anon1
+show_extension_param_handler	clistd.c	/^show_extension_param_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+show_help_handler	clistd.c	/^show_help_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+show_history_callback	clistd.c	/^show_history_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+show_ip_igmp_groups_handler	testapp.c	/^show_ip_igmp_groups_handler(param_t *param, ser_buff_t *tlv_buf, op_mode enable_or_disable){$/;"	f
+show_resgistered_cmd_handler	clistd.c	/^show_resgistered_cmd_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+size	serialize.h	/^    int size;$/;"	m	struct:serialized_buffer
+start_shell	cmd_hier.c	/^start_shell(void){$/;"	f
+step_no	ut/utinfra/ut_parser.c	/^    uint16_t step_no;$/;"	m	struct:tc_result_	file:
+string_fetch_integer	string_util.c	/^string_fetch_integer(unsigned char *string, int string_size, int index) {$/;"	f
+string_space_trim	string_util.c	/^string_space_trim(char *string){$/;"	f
+string_validation_handler	clistd.c	/^string_validation_handler(leaf_t *leaf, char *value_passed){$/;"	f
+suboptions_param	cmd_hier.c	/^static param_t suboptions_param;$/;"	v	file:
+support_cmd_negation	cmd_hier.c	/^support_cmd_negation(param_t *param){$/;"	f
+supportsave_handler	clistd.c	/^supportsave_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){$/;"	f
+swap_tlv_units	cmdtlv.h	/^swap_tlv_units(tlv_struct_t *tlv1, tlv_struct_t *tlv2){$/;"	f
+tc_append_result	ut/utinfra/ut_parser.c	/^tc_append_result(glthread_t *head, uint16_t step_no, bool pass, bool match) {$/;"	f	file:
+tc_cleanup_result_list	ut/utinfra/ut_parser.c	/^tc_cleanup_result_list(glthread_t *result_head) {$/;"	f	file:
+tc_print_result	ut/utinfra/ut_parser.c	/^tc_print_result (glthread_t *head) {$/;"	f	file:
+tc_result_	ut/utinfra/ut_parser.c	/^typedef struct tc_result_ {$/;"	s	file:
+tc_result_t	ut/utinfra/ut_parser.c	/^} tc_result_t;$/;"	t	typeref:struct:tc_result_	file:
+temp	string_util.c	/^char temp[ LEAF_ID_SIZE + 2];$/;"	v
+terminate_signal_handler	clicbext.c	/^terminate_signal_handler(){$/;"	f
+tlv	parser.c	/^static tlv_struct_t tlv;$/;"	v	file:
+tlv_buff	cmd_hier.c	/^ser_buff_t *tlv_buff;$/;"	v
+tlv_copy_leaf_id	cmdtlv.h	49;"	d
+tlv_copy_leaf_value	cmdtlv.h	54;"	d
+tlv_struct	cmdtlv.h	/^typedef struct tlv_struct{$/;"	s
+tlv_struct_t	cmdtlv.h	/^} tlv_struct_t;$/;"	t	typeref:struct:tlv_struct
+tokenize	string_util.c	/^tokenize(char *token, unsigned int size, unsigned int index){$/;"	f
+tokenizer	string_util.c	/^char** tokenizer(char* _a_str, const char a_delim, size_t *token_cnt){$/;"	f
+tokens	string_util.c	/^static char * tokens[MAX_CMD_TREE_DEPTH];$/;"	v	file:
+truncate_serialize_buffer	serialize.c	/^void truncate_serialize_buffer(ser_buff_t **b){$/;"	f
+untokenize	string_util.c	/^untokenize(unsigned int index){$/;"	f
+user_validation_callback	cmd_hier.h	/^typedef int (*user_validation_callback)(char *leaf_value);$/;"	t
+user_validation_cb_fn	cmd_hier.h	/^    user_validation_callback user_validation_cb_fn;$/;"	m	struct:leaf
+user_vlan_validation_callback	testapp.c	/^user_vlan_validation_callback(char *vlan_id){$/;"	f
+ut_log_file	ut/utinfra/ut_parser.c	/^static FILE *ut_log_file = NULL;$/;"	v	file:
+ut_parser_debug	ut/utinfra/ut_parser.c	/^static bool ut_parser_debug = false;$/;"	v	file:
+ut_parser_init	ut/utinfra/ut_parser.c	/^ut_parser_init ( ) {$/;"	f
+ut_parser_recv_buff	ut/utinfra/ut_parser.c	/^static unsigned char ut_parser_recv_buff[UT_PARSER_BUFF_MAX_SIZE];$/;"	v	file:
+ut_parser_recv_buff_data_size	ut/utinfra/ut_parser.c	/^static int ut_parser_recv_buff_data_size;$/;"	v	file:
+ut_test_handler	ut/utinfra/ut_parser.c	/^ut_test_handler (param_t *param, $/;"	f
+validate_loopback_address	main2.c	/^validate_loopback_address(char *value){$/;"	f
+validate_loopback_address	main3.c	/^validate_loopback_address(char *value){$/;"	f
+validate_loopback_address	main4.c	/^validate_loopback_address(char *value){$/;"	f
+validate_node_name	main2.c	/^validate_node_name(char *value){$/;"	f
+validate_node_name	main3.c	/^validate_node_name(char *value){$/;"	f
+validate_node_name	main4.c	/^validate_node_name(char *value){$/;"	f
+value	cmdtlv.h	/^    char value[LEAF_VALUE_HOLDER_SIZE];$/;"	m	struct:tlv_struct
+value_holder	cmd_hier.h	/^    char value_holder[LEAF_VALUE_HOLDER_SIZE];$/;"	m	struct:leaf
+weight	gluethread/test.c	/^    int weight;$/;"	m	struct:_person	file:
