@@ -66,6 +66,7 @@ esc_seq_move_cur_down(int sockfd, int count) {
     return write(sockfd, buff, rc);
 }
 
+/* Move Cursor to right by 1 if count is passed as 0 */
 int
 esc_seq_move_cur_right(int sockfd, int count) {
 
@@ -77,6 +78,7 @@ esc_seq_move_cur_right(int sockfd, int count) {
     return write(sockfd, buff, rc);
 }
 
+/* Move Cursor to left by 1 if count is passed as 0 */
 int
 esc_seq_move_cur_left(int sockfd, int count) {
 

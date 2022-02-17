@@ -110,7 +110,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 line[0].cpos++;
                  rc = write(sockfd, (const char *)line[0].lbuf + line[0].cpos - 1, rem + 1);
                 printf ("Setting cursor to on charc %c at col %d\n", line->lbuf[line[0].cpos], line[0].cpos + 1);
-                esc_seq_move_cur_to_column(sockfd, line[0].cpos + 1); // column no starts from 1
+                esc_seq_move_cur_left(sockfd, rem );
             }
             break;
             case  FORWARD_SLASH_KEY:
@@ -209,14 +209,6 @@ static void
                                 }
                                  //rc = write(sockfd, "\033[D", 3);
                                 break;
-                            case 'H': /* Home Key */
-                                rc = esc_seq_move_cur_beginning_of_line(sockfd, 0);
-                                line[0].cpos = 0;
-                            break;
-                            case 'F': /* END key */
-                                rc = esc_seq_move_cur_to_column(sockfd, line[0].lpos + 2);
-                                line[0].cpos = line[0].lpos + 1;
-                            break;
                         }
                 }
             default:;
@@ -244,17 +236,42 @@ static void
                                     if (line[0].n == 0) return;
                                     /* At the end of line */
                                     else if (line[0].lpos + 1  == line[0].cpos) return;
+                                    /* Deleting the last char */
+                                    else if (line[0].lpos   == line[0].cpos) {
+                                        line[0].lbuf[line[0].cpos] = '\0';
+                                        line[0].lpos--;
+                                        line[0].n--;
+                                        rc = write(sockfd, (const char *)" ", 1);
+                                        esc_seq_move_cur_left(sockfd, 1);
+                                    }
                                      /* In the middle of line */
                                      else if (line[0].cpos >= 0 && line[0].cpos <= line[0].lpos) {
                                         int rem = line[0].lpos - line[0].cpos + 1;
                                         line_del_charat(&line[0], line[0].cpos);
-                                        rc = esc_seq_erase_curr_line_from_cur_end(sockfd);
+                                        esc_seq_erase_curr_line_from_cur_end(sockfd);
                                         rc = write(sockfd, (const char *)line[0].lbuf + line[0].cpos, rem -1);
-                                        esc_seq_move_cur_to_column(sockfd, line[0].cpos +1);
+                                        esc_seq_move_cur_left(sockfd, rem -1);
                                      }
-                                    break;
+                                     break;
                             }
-                        case '4':
+                            break;
+                            case '1': /* Home Key */
+                                switch(msg[3]) {
+                                    case '~':
+                                        if (!line[0].cpos) return;
+                                        rc = esc_seq_move_cur_left(sockfd, line[0].cpos);
+                                        line[0].cpos = 0;
+                                        break;
+                                }
+                            break;
+                            case '4': /* END key */
+                                switch (msg[3]) {
+                                case '~':
+                                    if (line[0].cpos == line[0].lpos + 1) return;
+                                    rc = esc_seq_move_cur_right(sockfd, line[0].n - line[0].cpos);
+                                    line[0].cpos = line[0].lpos + 1;
+                                    break;
+                                }
                             break;
                     }
             }
