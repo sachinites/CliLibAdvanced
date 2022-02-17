@@ -208,6 +208,7 @@ static void
                                  rc = write(sockfd, (const char *)msg, 3);
                                 break;
                             case 'C': /* RIGHT Arrow */
+                                if (line_is_empty(&line[0])) return;
                                 if (line[0].cpos != line[0].lpos + 1) {
                                     line[0].cpos++;
                                     rc = esc_seq_move_cur_right(sockfd, 1);
@@ -277,6 +278,7 @@ static void
                             case '4': /* END key */
                                 switch (msg[3]) {
                                 case '~':
+                                    if (line_is_empty(&line[0])) return;
                                     if (line[0].cpos == line[0].lpos + 1) return;
                                     rc = esc_seq_move_cur_right(sockfd, line[0].n - line[0].cpos);
                                     line[0].cpos = line[0].lpos + 1;
