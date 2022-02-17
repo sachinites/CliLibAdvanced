@@ -128,7 +128,13 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     line_add_character(&line[0], msg[0]);
                     line[0].cpos++;
                     EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
-                    line_reinit(&line[0]);
+                    line[0].cpos--;
+                    line[0].lbuf[line[0].lpos] = '\0';
+                    line[0].lpos--;
+                    line[0].n--;
+                    //esc_seq_move_cur_left(sockfd, line[0].n - 1);
+                    line_rewrite(sockfd, &line[0]);
+                    //line_reinit(&line[0]);
                 }
                 break;
             case CTRL_L_KEY:
