@@ -31,6 +31,36 @@ clear_screen() {
 }
 
 static void
+ProcessNormalKeyPress(int sockfd, line_t *line, char c) {
+
+    if (line_is_empty(line))
+    {
+        line_add_character(line, c);
+        line->cpos++;
+        write(sockfd, (const char *)&c, 1);
+    }
+    /* Tying at the end of line */
+    else if (line->cpos == line->lpos + 1)
+    {
+        line_add_character(line, c);
+        line->cpos++;
+        write(sockfd, (const char *)&c, 1);
+    }
+    /* Tying in the middle of line */
+    else
+    {
+        int rem = line->lpos - line->cpos + 1;
+        print_line(line);
+        line_add_character(line, c);
+        print_line(line);
+        line->cpos++;
+        write(sockfd, (const char *)line->lbuf + line->cpos - 1, rem + 1);
+        printf("Setting cursor to on charc %c at col %d\n", line->lbuf[line->cpos], line->cpos + 1);
+        esc_seq_move_cur_left(sockfd, rem);
+    }
+}
+
+static void
 ReadSingleCharMsg(int sockfd, unsigned char *msg) {
 
     int rc = 0;
@@ -89,6 +119,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
         case 'A' ... 'Y':
         case 48 ... 57:
         case SPACE_KEY:
+        #if 0
             /* Tying on empty line */
             if (line_is_empty(&line[0])) {
                 line_add_character(&line[0], msg[0]);
@@ -120,11 +151,14 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
                     line_reinit(&line[0]);
                 }
+                #endif
+                ProcessNormalKeyPress(sockfd, &line[0], msg[0]);
              break;
             case DOT_KEY:
             case QUESTION_KEY:
-                if ( (line[0].cpos == line[0].lpos + 1) ||
-                      (line[0].n == 0)) {
+                if (((line[0].cpos == line[0].lpos + 1) && 
+                        (line[0].lbuf[line[0].lpos] == ' ')) ||
+                        (line[0].n == 0)) {
                     line_add_character(&line[0], msg[0]);
                     line[0].cpos++;
                     EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
@@ -132,9 +166,11 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     line[0].lbuf[line[0].lpos] = '\0';
                     line[0].lpos--;
                     line[0].n--;
-                    //esc_seq_move_cur_left(sockfd, line[0].n - 1);
                     line_rewrite(sockfd, &line[0]);
-                    //line_reinit(&line[0]);
+                }
+                else {
+                    /* Treat ? and . as normal keys */
+                    ProcessNormalKeyPress(sockfd, &line[0], msg[0]);
                 }
                 break;
             case CTRL_L_KEY:
