@@ -114,12 +114,12 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             }
             break;
             case  FORWARD_SLASH_KEY:
-             if (line[0].cpos == line[0].lpos + 1) {
-                line_add_character(&line[0], msg[0]);
-                line[0].cpos++;
-                EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
-                line_reinit(&line[0]);
-             }
+                if (line[0].cpos == line[0].lpos + 1) {
+                    line_add_character(&line[0], msg[0]);
+                    line[0].cpos++;
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    line_reinit(&line[0]);
+                }
              break;
             case DOT_KEY:
             case QUESTION_KEY:
@@ -131,6 +131,23 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     line_reinit(&line[0]);
                 }
                 break;
+            case CTRL_L_KEY:
+                rc = esc_seq_clear_screen(sockfd);
+                rc += write(sockfd, "Press Enter To Continue...",
+                            strlen("Press Enter To Continue.."));
+                rc += esc_seq_move_cur_beginning_of_line(sockfd, 1);
+                line_reinit(&line[0]);
+                break;
+            case SINGLE_UPPER_COMMA_KEY:
+                if (line_is_empty(&line[0])) return;
+                /* Already at the end of line */
+                if (line[0].cpos == line[0].lpos + 1) return;
+                rc = esc_seq_erase_curr_line_from_cur_end(sockfd);
+                line[0].n -= line[0].lpos - line[0].cpos +1;
+                /* Do not update lpos if already at the bginning of line */
+                line[0].lpos =  line[0].cpos ?  line[0].cpos - 1 : 0;
+                break;
+            default:;
     }
 }
 
@@ -144,7 +161,6 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
 
     switch (msg[0]) {
         case ENTER_KEY:
-
             /* If the user has typed cls<enter> then send back clear screen
             instruction code to remote client. Dont bother to feed to Parser */
             if (clear_screen()) {
@@ -187,27 +203,21 @@ static void
                         switch (msg[2]) {
                             case 'A': /* UP Arrow */
                                 rc = write(sockfd, (const char *)msg, 3);
-                                //rc = write(sockfd, "\033[A", 3);
                                 break;
                             case 'B': /* DOWN Arrow */
                                  rc = write(sockfd, (const char *)msg, 3);
-                                 //rc = write(sockfd, "\033[B", 3);
                                 break;
                             case 'C': /* RIGHT Arrow */
                                 if (line[0].cpos != line[0].lpos + 1) {
                                     line[0].cpos++;
-                                    //rc = write(sockfd, (const char *)msg, 3);
                                     rc = esc_seq_move_cur_right(sockfd, 1);
                                 }
-                                 //rc = write(sockfd, "\033[C", 3);
                                 break;
                             case 'D': /* LEFT Arrow */
                                 if (line[0].cpos > 0) {
                                  line[0].cpos--;
                                  rc = esc_seq_move_cur_left(sockfd, 1);
-                                 //rc = write(sockfd, (const char *)msg, 3);
                                 }
-                                 //rc = write(sockfd, "\033[D", 3);
                                 break;
                         }
                 }

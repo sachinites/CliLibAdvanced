@@ -10,8 +10,10 @@ typedef enum {
 
     BACKSPACE = 8,
     TAB_KEY = 9,
+    CTRL_L_KEY = 12,
     ENTER_KEY = 13,
     SPACE_KEY = 32,
+    SINGLE_UPPER_COMMA_KEY = 39,
     DOT_KEY = 46,
     FORWARD_SLASH_KEY = 47,
     QUESTION_KEY = 63,
