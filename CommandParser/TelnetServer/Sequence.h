@@ -22,6 +22,7 @@ typedef enum {
 } KEY_T;
 
 #define TAB_SIZE   4
+#define TAB_SPACE   "    "
 
 void
 esc_seq_read_cur_pos (unsigned char *msg, uint16_t msg_size, int *row, int *col);

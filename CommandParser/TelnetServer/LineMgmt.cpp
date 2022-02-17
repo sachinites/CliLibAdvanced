@@ -124,7 +124,7 @@ line_del_charat(line_t *line, uint8_t pos) {
     /* Deleting the character from end */
     if (pos == line->lpos) {
         line->lbuf[pos] = '\0';
-        line->lpos--;
+        if (line->lpos) line->lpos--;
         line->n--;
         return;
     }
@@ -136,7 +136,7 @@ line_del_charat(line_t *line, uint8_t pos) {
             line->lbuf[i - 1] = line->lbuf[i];
             line->lbuf[i] = '\0';
         }
-        line->lpos--;
+        if (line->lpos) line->lpos--;
         line->n--;
     }
 }

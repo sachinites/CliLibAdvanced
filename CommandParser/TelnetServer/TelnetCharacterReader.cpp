@@ -110,8 +110,9 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             }
             break;
         case TAB_KEY:
-            //rc = write(sockfd, "    ", 4);
             esc_seq_move_cur_right(sockfd, TAB_SIZE);
+            line_save_cpos(&line[0]);
+            line[0].lbuf[line[0].cpos] = '\0';
             if (line_is_empty(&line[0])) {
                 line[0].lpos += TAB_SIZE -1;
             }
@@ -120,6 +121,8 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             }
             line[0].n += TAB_SIZE;
             line[0].cpos += TAB_SIZE;
+            /*Save Tab in Line, because \0 will create problem as it is non-writable character*/
+            strncpy((char *)&line[0].lbuf[line[0].saved_pos], TAB_SPACE,  TAB_SIZE);
             break;
         case 'Z':
             print_line(&line[0]);
@@ -128,40 +131,8 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
         case 'A' ... 'Y':
         case 48 ... 57:
         case SPACE_KEY:
-        #if 0
-            /* Tying on empty line */
-            if (line_is_empty(&line[0])) {
-                line_add_character(&line[0], msg[0]);
-                line[0].cpos++;
-                rc = write(sockfd, (const char *)msg, 1);
-            }
-            /* Tying at the end of line */
-            else if (line->cpos == line->lpos + 1) {
-                line_add_character(&line[0], msg[0]);
-                line[0].cpos++;
-                rc = write(sockfd, (const char *)msg, 1);
-            }
-            /* Tying in the middle of line */
-            else {
-                int rem = line[0].lpos - line[0].cpos + 1;
-                print_line(&line[0]);
-                line_add_character(&line[0], msg[0]);
-                print_line(&line[0]);
-                line[0].cpos++;
-                 rc = write(sockfd, (const char *)line[0].lbuf + line[0].cpos - 1, rem + 1);
-                printf ("Setting cursor to on charc %c at col %d\n", line->lbuf[line[0].cpos], line[0].cpos + 1);
-                esc_seq_move_cur_left(sockfd, rem );
-            }
-            break;
-            case  FORWARD_SLASH_KEY:
-                if (line[0].cpos == line[0].lpos + 1) {
-                    line_add_character(&line[0], msg[0]);
-                    line[0].cpos++;
-                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
-                    line_reinit(&line[0]);
-                }
-                #endif
-                ProcessNormalKeyPress(sockfd, &line[0], msg[0]);
+        case '_':
+             ProcessNormalKeyPress(sockfd, &line[0], msg[0]);
              break;
             case DOT_KEY:
             case QUESTION_KEY:
@@ -197,6 +168,26 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 line[0].n -= line[0].lpos - line[0].cpos +1;
                 /* Do not update lpos if already at the bginning of line */
                 line[0].lpos =  line[0].cpos ?  line[0].cpos - 1 : 0;
+                break;
+            case FORWARD_SLASH_KEY:
+                if (((line[0].cpos == line[0].lpos + 1) && 
+                        (line[0].lbuf[line[0].lpos] == ' ') &&
+                        line[0].n)) {
+                    line_add_character(&line[0], msg[0]);
+                    line[0].cpos++;
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    line_reinit(&line[0]);
+                    #if 0
+                    line[0].cpos--;
+                    line[0].lbuf[line[0].lpos] = '\0';
+                    if (line[0].lpos) line[0].lpos--;  
+                    line[0].n--;
+                    #endif
+                }
+                else {
+                    /* Treat ? and . as normal keys */
+                    ProcessNormalKeyPress(sockfd, &line[0], msg[0]);
+                }
                 break;
             default:;
     }
@@ -271,6 +262,20 @@ static void
                                  rc = esc_seq_move_cur_left(sockfd, 1);
                                 }
                                 break;
+                            case 'H': /* Home Key */
+                                if (!line[0].cpos)
+                                    return;
+                                rc = esc_seq_move_cur_left(sockfd, line[0].cpos);
+                                line[0].cpos = 0;
+                                break;
+                            case 'F': /* End key */
+                                if (line_is_empty(&line[0]))
+                                    return;
+                                if (line[0].cpos == line[0].lpos + 1)
+                                    return;
+                                rc = esc_seq_move_cur_right(sockfd, line[0].n - line[0].cpos);
+                                line[0].cpos = line[0].lpos + 1;
+                                break;
                         }
                 }
             default:;
@@ -301,7 +306,7 @@ static void
                                     /* Deleting the last char */
                                     else if (line[0].lpos   == line[0].cpos) {
                                         line[0].lbuf[line[0].cpos] = '\0';
-                                        line[0].lpos--;
+                                        if (line[0].lpos) line[0].lpos--;
                                         line[0].n--;
                                         rc = write(sockfd, (const char *)" ", 1);
                                         esc_seq_move_cur_left(sockfd, 1);
@@ -312,7 +317,8 @@ static void
                                         line_del_charat(&line[0], line[0].cpos);
                                         esc_seq_erase_curr_line_from_cur_end(sockfd);
                                         rc = write(sockfd, (const char *)line[0].lbuf + line[0].cpos, rem -1);
-                                        esc_seq_move_cur_left(sockfd, rem -1);
+                                        printf ("rc = %d, rem = %d\n", rc, rem);
+                                        esc_seq_move_cur_left(sockfd, rem - 1);
                                      }
                                      break;
                             }
