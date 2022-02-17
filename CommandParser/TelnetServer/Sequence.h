@@ -21,6 +21,8 @@ typedef enum {
     DELETE_KEY = 127
 } KEY_T;
 
+#define TAB_SIZE   4
+
 void
 esc_seq_read_cur_pos (unsigned char *msg, uint16_t msg_size, int *row, int *col);
 int

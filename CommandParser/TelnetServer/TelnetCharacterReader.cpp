@@ -110,7 +110,16 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             }
             break;
         case TAB_KEY:
-            rc = write(sockfd, (const char *)msg, 1);
+            //rc = write(sockfd, "    ", 4);
+            esc_seq_move_cur_right(sockfd, TAB_SIZE);
+            if (line_is_empty(&line[0])) {
+                line[0].lpos += TAB_SIZE -1;
+            }
+            else{
+                line[0].lpos += TAB_SIZE;
+            }
+            line[0].n += TAB_SIZE;
+            line[0].cpos += TAB_SIZE;
             break;
         case 'Z':
             print_line(&line[0]);
@@ -164,7 +173,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
                     line[0].cpos--;
                     line[0].lbuf[line[0].lpos] = '\0';
-                    line[0].lpos--;
+                    if (line[0].lpos) line[0].lpos--;  
                     line[0].n--;
                     line_rewrite(sockfd, &line[0]);
                 }
