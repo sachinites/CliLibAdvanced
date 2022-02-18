@@ -77,7 +77,10 @@ int
 show_history_callback(param_t *param, ser_buff_t *b, op_mode enable_or_disable);
 
 int
-clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable);
+local_clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable);
+
+int
+remote_clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable);
 
 int
 exit_cmd_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable);

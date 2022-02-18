@@ -426,7 +426,7 @@ init_libcli(){
 
     /* Install clear command "cls"*/
     static param_t cls;
-    init_param(&cls, CMD, CLEAR_SCR_STRING, clear_screen_handler, 0, INVALID, 0, "clear screen");
+    init_param(&cls, CMD, CLEAR_SCR_STRING, local_clear_screen_handler, 0, INVALID, 0, "clear screen");
     HIDE_PARAM(&cls);
     libcli_register_param(0, &cls);
 

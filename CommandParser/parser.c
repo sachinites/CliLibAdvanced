@@ -41,6 +41,8 @@ void parse_file(char *file_name) ;
 
 /* Allow CLI from only one source at a time */
 pthread_mutex_t cli_mutex; 
+/* who is executing the CLI */
+static bool local_client = true;
 
 static param_t*
 array_of_possibilities[POSSIBILITY_ARRAY_SIZE];
@@ -329,8 +331,14 @@ parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd){
     }
 
     else if (strncmp (tokens[0], "repeat" , strlen(tokens[0])) == 0) {
-        parser_process_repeat_cmd(token_cnt == 1 ? 0 : tokens[1]);
-        if (is_repeat_cmd) *is_repeat_cmd = true;
+        if (local_client) {
+            parser_process_repeat_cmd(token_cnt == 1 ? 0 : tokens[1]);
+            if (is_repeat_cmd)
+                *is_repeat_cmd = true;
+        }
+        else {
+            cli_print("repeat cmd is not supported for Remote client\n");
+        }
     }   
 
     else if((strncmp(tokens[0], GOTO_ONE_LVL_UP_STRING, strlen(GOTO_ONE_LVL_UP_STRING)) == 0) && (token_cnt == 1))
@@ -339,9 +347,9 @@ parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd){
     else if((strncmp(tokens[0], GOTO_TOP_STRING, strlen(GOTO_TOP_STRING)) == 0) && (token_cnt == 1))
         goto_top_of_cmd_tree(get_cmd_tree_cursor());
 
-    
     else if((strncmp(tokens[0], CLEAR_SCR_STRING, strlen(CLEAR_SCR_STRING)) == 0) && (token_cnt == 1))
-        clear_screen_handler(0, 0, MODE_UNKNOWN);
+        local_client ? local_clear_screen_handler(0, 0, MODE_UNKNOWN) :
+                              remote_clear_screen_handler(0, 0, MODE_UNKNOWN);
 
     else if (!strncmp(tokens[0], "run" , strlen("run"))  && 
 	     !strncmp(tokens[1], "ut" , strlen("ut"))    &&
@@ -405,6 +413,8 @@ InputCliFromLocalShell(void){
         pthread_mutex_lock(&cli_mutex);
 
          GL_FD_OUT = STDOUT_FILENO;
+         local_client = true;
+
         /*IF only enter is hit*/ 
         if(strlen(cons_input_buffer) == 1){
             cons_input_buffer[0]= '\0';
@@ -511,6 +521,7 @@ void
 EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
 
     pthread_mutex_lock(&cli_mutex);
+    local_client = false;
     _EnhancedParser(sockfd, cli, cli_size);
     pthread_mutex_unlock(&cli_mutex);
 }

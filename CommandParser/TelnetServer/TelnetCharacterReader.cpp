@@ -20,16 +20,6 @@ extern int GL_FD_OUT;
 extern void
 EnhancedParser(int sockfd, char *cli, uint16_t cli_size);
 
-static bool
-clear_screen() {
-
-    if (strncmp((const char *)line[0].lbuf, "cls", 3) == 0 &&
-         line[0].n == 3) {
-        return true;
-    }
-    return false;
-}
-
 static void
 ProcessNormalKeyPress(int sockfd, line_t *line, char c) {
 
@@ -154,19 +144,22 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 }
                 break;
             case CTRL_L_KEY:
-                rc = esc_seq_clear_screen(sockfd);
-                rc += write(sockfd, "Press Enter To Continue...",
-                            strlen("Press Enter To Continue.."));
-                rc += esc_seq_move_cur_beginning_of_line(sockfd, 1);
-                line_reinit(&line[0]);
-                break;
+               line_reinit(&line[0]);
+               strncpy((char *)&line[0].lbuf[line[0].cpos] , "cls", 3);
+               line[0].lpos = 2;
+               line[0].cpos = 3;
+               line[0].n = 3;
+               EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+               line[0].lbuf[0] = '\0'; line[0].lbuf[1] = '\0'; line[0].lbuf[2] = '\0';
+               line[0].lpos = 0; line[0].cpos = 0; line[0].n = 0;
+               break;
             case SINGLE_UPPER_COMMA_KEY:
                 if (line_is_empty(&line[0])) return;
                 /* Already at the end of line */
                 if (line[0].cpos == line[0].lpos + 1) return;
                 rc = esc_seq_erase_curr_line_from_cur_end(sockfd);
                 line[0].n -= line[0].lpos - line[0].cpos +1;
-                /* Do not update lpos if already at the bginning of line */
+                /* Do not update lpos if already at the beginning of line */
                 line[0].lpos =  line[0].cpos ?  line[0].cpos - 1 : 0;
                 break;
             case FORWARD_SLASH_KEY:
@@ -177,12 +170,6 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                     line[0].cpos++;
                     EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
                     line_reinit(&line[0]);
-                    #if 0
-                    line[0].cpos--;
-                    line[0].lbuf[line[0].lpos] = '\0';
-                    if (line[0].lpos) line[0].lpos--;  
-                    line[0].n--;
-                    #endif
                 }
                 else {
                     /* Treat ? and . as normal keys */
@@ -203,23 +190,8 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
 
     switch (msg[0]) {
         case ENTER_KEY:
-            /* If the user has typed cls<enter> then send back clear screen
-            instruction code to remote client. Dont bother to feed to Parser */
-            if (clear_screen()) {
-                rc = esc_seq_clear_screen(sockfd);
-                rc += write(sockfd, "Press Enter To Continue...", 
-                            strlen("Press Enter To Continue.."));
-                rc += esc_seq_move_cur_beginning_of_line(sockfd, 1);
-                line_reinit(&line[0]);
-                return;
-            }
-            if (line[0].n == 0) {
-            /* If only enter is hit, no need to send new line reset,
-                The Parser will do it because we need re-write the line
-                header*/
-            }
-            else {
-                rc = write(sockfd, "\r\n", 2);
+            if (line[0].n) {
+                 rc = write(sockfd, "\r\n", 2);
             }
             EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
             line_reinit(&line[0]);

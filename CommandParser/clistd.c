@@ -26,6 +26,7 @@
 #include "css.h"
 #include "clicbext.h"
 #include "string_util.h"
+#include "TelnetServer/Sequence.h"
 
 extern CMD_PARSE_STATUS
 parse_input_cmd(char *input, unsigned int len, bool *is_repeat_cmd);
@@ -300,9 +301,17 @@ record_command(char *hist_file, char *cons_input_buffer, unsigned int cmd_len){
 }
 
 int
-clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
+local_clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
     
     system("clear");
+    return 0;   
+}
+
+int
+remote_clear_screen_handler(param_t *param, ser_buff_t *b, op_mode enable_or_disable){
+    
+    esc_seq_clear_screen(GL_FD_OUT);
+    esc_seq_set_cur_pos(GL_FD_OUT, 0 , 0);
     return 0;   
 }
 
