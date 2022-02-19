@@ -500,7 +500,7 @@ parse_file(char *file_name) {
 }	
 
 static void
-_EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
+_EnhancedParser( char *cli, uint16_t cli_size) {
 
     bool is_repeat_cmd;
     CMD_PARSE_STATUS status = UNKNOWN;
@@ -522,6 +522,7 @@ EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
 
     pthread_mutex_lock(&cli_mutex);
     local_client = false;
-    _EnhancedParser(sockfd, cli, cli_size);
+    GL_FD_OUT = sockfd;
+    _EnhancedParser(cli, cli_size);
     pthread_mutex_unlock(&cli_mutex);
 }

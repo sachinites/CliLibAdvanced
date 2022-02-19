@@ -85,7 +85,7 @@ line_add_character(line_t *line, char c){
 
     assert(line->n < MAX_LINE_LENGTH);
    
-   printf ("Adding Char %c at pos %d in line\n", c, line->cpos);
+   printf ("Adding Char %c[%d] at pos %d in line\n", c, c, line->cpos);
    
    /* Ist char case */
    if (line_is_empty(line)) {

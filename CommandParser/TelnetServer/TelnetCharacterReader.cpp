@@ -60,6 +60,14 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
 
     switch (msg[0]) {
         
+        case LINE_FEED_KEY:
+        case CARRIAGE_KEY:
+            if (line[0].n) {
+                rc = write(sockfd, "\r\n", 2);
+            }
+            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+            if (line[0].n) line_reinit(&line[0]);
+            break;
         case BACKSPACE:
             /* Empty line*/
             if (line[0].n == 0) return;
@@ -180,6 +188,11 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
     }
 }
 
+/* New line Character 
+ On unix Systems , New line character is \n ( 1 B ) i.e. 10
+ On windows, new line is \rnull (2B) i.e. 13 and 0
+ Also, on some systems, or test file, new line character is \r\n (2B) i.e. 13 and 10
+*/
 static void
 ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
 
@@ -188,15 +201,19 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
     printf ("2. %c[%d] %c[%d]\n", 
         msg[0], msg[0], msg[1], msg[1]);
 
-    switch (msg[0]) {
-        case ENTER_KEY:
-            if (line[0].n) {
-                 rc = write(sockfd, "\r\n", 2);
+    switch(msg[0]) {
+        case CARRIAGE_KEY:
+            switch(msg[1]){
+                case NULL_KEY:
+                case LINE_FEED_KEY:
+                    if (line[0].n) {
+                        rc = write(sockfd, "\r\n", 2);
+                    }
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    if (line[0].n) line_reinit(&line[0]);
+                    break;
             }
-            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
-            line_reinit(&line[0]);
             break;
-        default: ;
     }
 }
 
@@ -322,24 +339,40 @@ static void
 static void
  ReadLongerCharMsg(int sockfd, unsigned char *msg, uint16_t msg_size) {
 
-     int i;
+     uint16_t i;
 
-     for(i = 0; i < msg_size; i++) {
-         printf("%d : %c[%d]\n", i, msg[i], msg[i]);
+     static bool initialized = false;
+
+     if (!initialized) {
+         initialized = true;
+         return;
+     } 
+
+     for (i = 0 ; i < msg_size ; i++) {
+    
+         printf("%c[%d]\n", msg[i], msg[i]);
+         switch(msg[i]) {
+             case LINE_FEED_KEY:
+             case CARRIAGE_KEY:
+             case NULL_KEY:
+                if (line[0].n) {
+                    write(sockfd, "\n\r", 2);
+                }
+                EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                line_reinit(&line[0]);
+                 break;
+            default:
+                line_add_character(&line[0], msg[i]);
+                line[0].cpos++;
+                write(sockfd, (char *)&msg[i], 1);
+                break;
+         }
      }
-
-    if (msg[msg_size -1] == 'R') {
-        // ^[ [ # ; # R   where # represents row and col number
-        int row = 0, col = 0;
-        esc_seq_read_cur_pos(msg, msg_size, &row, &col);
-        printf ("Row = %d, col = %d\n", row, col);
-    }
-
  }
 
 void
 InputCliFromRemoteClient(int sockfd, unsigned char *msg, uint16_t msg_size) {
-
+    
     switch(msg_size) {
         case 1 :
             ReadSingleCharMsg(sockfd, msg);
@@ -355,7 +388,7 @@ InputCliFromRemoteClient(int sockfd, unsigned char *msg, uint16_t msg_size) {
             break;
         default:
             ReadLongerCharMsg(sockfd, msg, msg_size);
+            break;
            ;
     }
-    GL_FD_OUT = sockfd;
 }

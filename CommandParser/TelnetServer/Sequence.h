@@ -8,10 +8,12 @@
 /* https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html */
 typedef enum {
 
+    NULL_KEY = 0,
     BACKSPACE = 8,
     TAB_KEY = 9,
+    LINE_FEED_KEY = 10,
     CTRL_L_KEY = 12,
-    ENTER_KEY = 13,
+    CARRIAGE_KEY = 13,
     SPACE_KEY = 32,
     SINGLE_UPPER_COMMA_KEY = 39,
     DOT_KEY = 46,
