@@ -12,13 +12,14 @@
     https://gist.github.com/fnky/458719343aabd01cfb17a3a4f7296797
  */
 
-unsigned char gbuff[32];
 extern line_t line[1];
 
 extern int GL_FD_OUT;
 
+cli_exec_control_params_t ctrl_params = {false, false};
+
 extern void
-EnhancedParser(int sockfd, char *cli, uint16_t cli_size);
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size, cli_exec_control_params_t *ctrl_params);
 
 static void
 ProcessNormalKeyPress(int sockfd, line_t *line, char c) {
@@ -44,7 +45,7 @@ ProcessNormalKeyPress(int sockfd, line_t *line, char c) {
         line_add_character(line, c);
         print_line(line);
         line->cpos++;
-        write(sockfd, (const char *)line->lbuf + line->cpos - 1, rem + 1);
+        write(sockfd, (const char *)(line->lbuf + line->cpos - 1), rem + 1);
         printf("Setting cursor to on charc %c at col %d\n", line->lbuf[line->cpos], line->cpos + 1);
         esc_seq_move_cur_left(sockfd, rem);
     }
@@ -65,7 +66,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
             if (line[0].n) {
                 rc = write(sockfd, "\r\n", 2);
             }
-            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+            EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
             if (line[0].n) line_reinit(&line[0]);
             break;
         case BACKSPACE:
@@ -103,7 +104,8 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                 esc_seq_move_cur_left(sockfd, 1);
                 rc = esc_seq_erase_curr_line_from_cur_end(sockfd);
                 rc = write(sockfd, (const char *)line[0].lbuf + line[0].cpos, rem);
-                esc_seq_move_cur_to_column(sockfd, line[0].cpos +1);
+                esc_seq_move_cur_left(sockfd, rem);
+                //esc_seq_move_cur_to_column(sockfd, line[0].cpos +1);
                 return;
             }
             break;
@@ -139,7 +141,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                         (line[0].n == 0)) {
                     line_add_character(&line[0], msg[0]);
                     line[0].cpos++;
-                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
                     line[0].cpos--;
                     line[0].lbuf[line[0].lpos] = '\0';
                     if (line[0].lpos) line[0].lpos--;  
@@ -157,7 +159,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                line[0].lpos = 2;
                line[0].cpos = 3;
                line[0].n = 3;
-               EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+               EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
                line[0].lbuf[0] = '\0'; line[0].lbuf[1] = '\0'; line[0].lbuf[2] = '\0';
                line[0].lpos = 0; line[0].cpos = 0; line[0].n = 0;
                break;
@@ -176,7 +178,7 @@ ReadSingleCharMsg(int sockfd, unsigned char *msg) {
                         line[0].n)) {
                     line_add_character(&line[0], msg[0]);
                     line[0].cpos++;
-                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
                     line_reinit(&line[0]);
                 }
                 else {
@@ -209,7 +211,7 @@ ReadDoubleCharMsg(int sockfd, unsigned char *msg) {
                     if (line[0].n) {
                         rc = write(sockfd, "\r\n", 2);
                     }
-                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                    EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
                     if (line[0].n) line_reinit(&line[0]);
                     break;
             }
@@ -358,7 +360,7 @@ static void
                 if (line[0].n) {
                     write(sockfd, "\n\r", 2);
                 }
-                EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n);
+                EnhancedParser(sockfd, (char *)line[0].lbuf, line[0].n, &ctrl_params);
                 line_reinit(&line[0]);
                  break;
             default:

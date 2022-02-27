@@ -53,4 +53,32 @@ line_get_saved_pos(line_t *line) ;
 int
 line_rewrite(int sockfd, line_t *line);
 
+/* Line history Mgmt */
+#define N_HISTORY   100
+
+typedef struct line_db_ {
+
+    line_t line[N_HISTORY];
+    int next_index;
+    int navigation_index;
+} line_db_t;
+
+void
+linedb_init(line_db_t *ldb);
+
+void
+linedb_record(line_db_t *ldb, line_t *line);
+
+void
+linedb_process_up_arrow(line_db_t *ldb, int sockfd);
+
+void
+linedb_process_down_arrow(line_db_t *ldb, int sockfd);
+
+typedef struct cli_exec_control_params_{
+
+    bool tab_key;
+    bool exec_from_root;
+} cli_exec_control_params_t;
+
 #endif

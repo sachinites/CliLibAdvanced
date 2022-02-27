@@ -176,3 +176,13 @@ line_rewrite(int sockfd, line_t *line) {
 
     return write(sockfd, (const char *)line->lbuf, line->n);
 }
+
+void
+linedb_process_up_arrow(line_db_t *ldb, int sockfd) {
+
+}
+
+void
+linedb_process_down_arrow(line_db_t *ldb, int sockfd) {
+
+}

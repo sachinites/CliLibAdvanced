@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <pthread.h>
 #include <errno.h>
+#include "TelnetServer/LineMgmt.h"
 #include "cmdtlv.h"
 #include "cliconst.h"
 #include "css.h"
@@ -38,6 +39,8 @@ run_test_case(char *file_name, uint16_t tc_no);
 
 static bool cmd_recording_enabled = true;
 void parse_file(char *file_name) ;
+
+static cli_exec_control_params_t *ctrl_params;
 
 /* Allow CLI from only one source at a time */
 pthread_mutex_t cli_mutex; 
@@ -518,11 +521,14 @@ _EnhancedParser( char *cli, uint16_t cli_size) {
 }
 
 void
-EnhancedParser(int sockfd, char *cli, uint16_t cli_size) {
+EnhancedParser(int sockfd, char *cli, uint16_t cli_size, 
+                            cli_exec_control_params_t *ctrl_params) {
 
     pthread_mutex_lock(&cli_mutex);
     local_client = false;
+    ctrl_params = ctrl_params;
     GL_FD_OUT = sockfd;
     _EnhancedParser(cli, cli_size);
+    ctrl_params = NULL;
     pthread_mutex_unlock(&cli_mutex);
 }
